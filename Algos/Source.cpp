@@ -30,6 +30,16 @@ public:
             delete_first();
     }
 
+    int size() {
+        Node<T>* ptr = tail;
+        int length = 0;
+        while (ptr != nullptr) {
+            ptr = ptr->prev;
+            length++;
+        }
+        return length;
+    }
+
     Node<T>* add_first(T data) {
         Node<T>* ptr = new Node<T>(data);
         ptr->next = head;
@@ -81,15 +91,32 @@ public:
     }
 
     Node<T>* get(int index) {
-        Node<T>* ptr = head;
-        int count = 0;
-        while (count != index) {
-            if (ptr == nullptr)
-                return ptr;
-            ptr = ptr->next;
-            count++;
+        if (index < 0)
+            return nullptr;
+        int listSize = size();
+        if (index > listSize / 2) //проверка на позицию элемента
+        {
+            Node<T>* ptr = tail;
+            int count = listSize - 1;
+            while (count != index) {
+                if (ptr == nullptr)
+                    return ptr;
+                ptr = ptr->prev;
+                count--;
+            }
+            return ptr;
         }
-        return ptr;
+        else {  
+            Node<T>* ptr = head;
+            int count = 0;
+            while (count != index) {
+                if (ptr == nullptr)
+                    return ptr;
+                ptr = ptr->next;
+                count++;
+            }
+            return ptr;
+        }
     }
 
     Node<T>* insert(int index, T data) {
@@ -132,14 +159,33 @@ public:
         delete ptr;
     }
 
-    int size() {
-        Node<T>* ptr = tail;
-        int length = 0;
-        while (ptr != nullptr) {
-            ptr = ptr->prev;
-            length++;
+    void remove_current(const T& data)
+    {
+        Node<T>* current = head;
+        while (current != nullptr && current->data != data)// ищем узел с конкретным значением 
+        {
+            current = current->next;
         }
-        return length;
+
+        if (current == nullptr)
+        {
+            return;
+        }
+
+        Node<T>* left = current->prev;
+        Node<T>* right = current->next;
+
+        if (left != nullptr)
+            left->next = right;
+        else
+            head = right;
+
+        if (right != nullptr)
+            right->prev = left;
+        else
+            tail = left;
+
+        delete current;
     }
 
     Node<T>* operator [] (int index) {
@@ -164,15 +210,17 @@ int main()
 	//дополним список 2 новыми элементами и выведем весь список на экран 
 	lst.insert(5, "ШИКАРНЫЙ");
 	lst.insert(6, "Наварили?");
-	cout<<"размер списка  " << lst.size() << "\n\n";
 	for (int i =0 ;i<lst.size();i++)
 		cout << lst[i]->data << " ";
+    cout <<"\n" << "размер списка  " << lst.size() << "\n";
 	cout << "\n\n";
 	//теперь проверим функцию удаления и выведем список после удаления нескольких элементов
 	lst.erase(0);
     lst.erase(3);
 	lst.erase(5);
 	lst.erase(7);//ничего не удалится тк это несуществующий элемент
+
+    lst.remove_current("Наварили?");
 
 	for (int i = 0;i < lst.size();i++)
 		cout << lst[i]->data << " ";
