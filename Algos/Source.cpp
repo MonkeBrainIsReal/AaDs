@@ -1,9 +1,93 @@
 #include <iostream>
-#include "Darray.h"
-
+#include <windows.h>
 using namespace std;
+HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
 
-template <typename T>
+template<typename T>
+class DArray
+{
+private:
+    int cap;
+    int NumOfEl;
+    T** arr;
+public:
+
+    DArray(int size = 6)
+    {
+        this->cap = size;
+        this->NumOfEl = 0;
+        this->arr = new T * [this->cap];
+
+        initialize(this->NumOfEl);
+
+    };
+
+    ~DArray()
+    {
+        for (int i = 0; i < NumOfEl; i++)
+        {
+            delete this->arr[i];
+        }
+        delete[]this->arr;
+    };
+
+    void initialize(int from)
+    {
+        for (int i = from; i < cap; i++)
+        {
+            this->arr[i] = nullptr;
+        }
+    };
+
+   void expand()
+    {
+        this->cap *= 2;
+        T** tempArr = new T * [this->cap];
+
+        for (int i = 0;i < this->NumOfEl;i++)
+        {
+            tempArr[i] = new T(*this->arr[i]);
+        }
+
+        for (int i = 0; i < NumOfEl; i++)
+        {
+            delete this->arr[i];
+        }
+        delete[]this->arr;
+
+        this->arr = tempArr;
+        initialize(this->NumOfEl);
+
+
+    };
+
+   void push(const T& element)
+    {
+
+        if (this->NumOfEl >= this->cap)
+        {
+            this->expand();
+        }
+
+        this->arr[this->NumOfEl++] = new T(element);
+    };
+
+    const int& size()const
+    {
+        return this->NumOfEl;
+    }
+
+    T& operator [](const int index)
+    {
+        if (index < 0 || index >= this->NumOfEl)
+        {
+            throw("trying to access unallocated memory");
+        }
+        return *this->arr[index];
+    };//вместо функции get, будет оператор который возвращает значение по индексу 
+};
+
+template<typename T>
 class Node {
 public:
     Node* prev;
@@ -197,7 +281,7 @@ public:
 };
 
 int main()
-{
+{///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
 	LinkedList<string> lst;
     setlocale(LC_ALL, "Russian");
 	//добавляем 4 элемента в наш список 
@@ -228,7 +312,23 @@ int main()
 	for (int i = 0;i < lst.size();i++)
 		cout << lst[i]->data << " ";
 	cout << "\n";
-	cout << "размер списка  " << lst.size() << "\n";
-	return 0;
-
+	cout << "размер списка  " << lst.size() << "\n\n\n";
+   
+   
+	///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ МАССИВА
+    DArray<int> d;
+    d.push(666);
+    d.push(777);
+    d.push(888);
+    d.push(999);
+    d.push(000);
+    d.push(111);
+    d.push(222);
+    for (int i = 0;i < d.size();i++) {
+        cout << d[i] << "\n";
+    }
+    SetConsoleTextAttribute(Output, 12);
+    cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
+    SetConsoleTextAttribute(Output, 7);
+    return 0;
 }
