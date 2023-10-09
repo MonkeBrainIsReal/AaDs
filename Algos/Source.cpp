@@ -12,7 +12,7 @@ private:
     T** arr;
 public:
 
-    DArray(int size = 6)
+    DArray(int size = 6)//базовый конструктор с каким то случайным размером
     {
         this->cap = size;
         this->NumOfEl = 0;
@@ -35,11 +35,11 @@ public:
     {
         for (int i = from; i < cap; i++)
         {
-            this->arr[i] = nullptr;
+            this->arr[i] = nullptr;//заполняем массивыч 0
         }
     };
 
-   void expand()
+   void expand()//функцция для расширения нашего массива
     {
         this->cap *= 2;
         T** tempArr = new T * [this->cap];
@@ -51,7 +51,7 @@ public:
 
         for (int i = 0; i < NumOfEl; i++)
         {
-            delete this->arr[i];
+            delete this->arr[i];//подчищаем все элементы массива
         }
         delete[]this->arr;
 
@@ -61,7 +61,7 @@ public:
 
     };
 
-   void push(const T& element)
+   void push(const T& element)//добавление элемента в начало массива
     {
 
         if (this->NumOfEl >= this->cap)
@@ -77,14 +77,55 @@ public:
         return this->NumOfEl;
     }
 
-    T& operator [](const int index)
+    T& operator [](const int index)//вместо функции get, будет оператор который возвращает значение по индексу 
     {
         if (index < 0 || index >= this->NumOfEl)
         {
             throw("trying to access unallocated memory");
         }
         return *this->arr[index];
-    };//вместо функции get, будет оператор который возвращает значение по индексу 
+    };
+    void insert(const T& element, int position)
+    {
+        if (position < 0 || position > this->NumOfEl)
+        {
+            throw("Invalid position");
+        }
+
+        if (this->NumOfEl >= this->cap)
+        {
+            this->expand();
+        }
+
+        // Сдвигаем элементы вправо для освобождения места под новый элемент
+        for (int i = this->NumOfEl; i > position; --i)
+        {
+            this->arr[i] = this->arr[i - 1];
+        }
+
+        // Вставляем новый элемент
+        this->arr[position] = new T(element);
+        ++this->NumOfEl;
+    }
+    void remove(int index)
+    {
+        if (index < 0 || index >= this->NumOfEl)
+        {
+            throw("Invalid index");
+        }
+
+        // Освобождаем память, выделенную под элемент, который мы удаляем
+        delete this->arr[index];
+
+        // Сдвигаем элементы влево для заполнения пустого места
+        for (int i = index; i < this->NumOfEl - 1; ++i)
+        {
+            this->arr[i] = this->arr[i + 1];
+        }
+
+        // Уменьшаем количество элементов в массиве
+        --this->NumOfEl;
+    }
 };
 
 template<typename T>
@@ -324,9 +365,12 @@ int main()
     d.push(000);
     d.push(111);
     d.push(222);
+    d.insert(12345, 4);
+    d.remove(6);
     for (int i = 0;i < d.size();i++) {
         cout << d[i] << "\n";
     }
+    cout << "размер масcива "<<d.size() << "\n\n";
     SetConsoleTextAttribute(Output, 12);
     cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
     SetConsoleTextAttribute(Output, 7);
