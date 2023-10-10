@@ -1,7 +1,15 @@
 #include <iostream>
 #include <windows.h>
+#include <string>
+#include <cctype>
+#include <sstream>
+#include <cmath>
+
 using namespace std;
 HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
+
+
+
 
 template<typename T>
 class DArray
@@ -321,9 +329,133 @@ public:
     }
 };
 
+
+template <typename T>
+class Stack {
+private:
+    LinkedList<T> list;
+
+public:
+    Stack() {}
+
+    // Конструктор копирования
+    Stack(const Stack& other) : list(other.list) {}
+
+    // Конструктор перемещения
+    Stack(Stack&& other) noexcept : list(std::move(other.list)) {}
+
+    ~Stack() {}
+
+    void push(T data) {
+        list.add_first(data);
+    }
+
+    void pop() {
+        list.delete_first();
+    }
+
+    T top() const {//полчаем инфу 
+        if (list.head != nullptr) {
+            return list.head->data;
+        }
+        else {
+            return T();
+        }
+    }
+
+    bool empty() const {
+        return list.head == nullptr;
+    }
+
+    int size() const {
+        return list.size();
+    }
+};
+
+
+class Token {
+public:
+    enum Type 
+    {
+        OPERATOR, OPERAND, FUNCTION, OPEN_PARENTHESIS, CLOSE_PARENTHESIS 
+    };
+
+    Type type;
+    string value;
+
+    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}
+};
+
+bool isOperatorOrPower(const string& token) {
+    return token == "+" || token == "-" || token == "*" || token == "/" || token == "^";
+}
+
+bool isFunction(const string& token) {
+    return token == "sin" || token == "cos";
+}
+
+int getOperatorOrPowerPriority(const string& op) {
+    if (op == "+" || op == "-")
+        return 1;
+    else if (op == "*" || op == "/")
+        return 2;
+    else if (op == "^")
+        return 3;
+    else
+        return 0;
+}
+
+string infixToPostfix(const string& infixExpression) {
+    stringstream ss(infixExpression);
+    Stack<Token> operators;
+    stringstream postfix;
+
+    string token;
+    while (ss >> token) //пока есть что считывать
+    {
+        if (std::isdigit(token[0]) || (token.size() > 1 && std::isdigit(token[1]))) {
+            postfix << token << " ";
+        }
+        else if (isOperatorOrPower(token) || isFunction(token))// проверка на различные операторы 
+        {
+            while (!operators.empty() && (operators.top().type == Token::OPERATOR || operators.top().type == Token::FUNCTION) && getOperatorOrPowerPriority(operators.top().value) >= getOperatorOrPowerPriority(token)) 
+            {
+                postfix << operators.top().value << " ";
+                operators.pop();
+            }
+            operators.push(Token(Token::OPERATOR, token));
+        }
+        else if (token == "(") 
+        {
+            operators.push(Token(Token::OPEN_PARENTHESIS, token));
+        }
+        else if (token == ")") 
+        {
+            while (!operators.empty() && operators.top().type != Token::OPEN_PARENTHESIS) 
+            {
+                postfix << operators.top().value << " ";
+                operators.pop();
+            }
+            operators.pop(); // Убираем открывающую скобку
+        }
+    }
+
+    while (!operators.empty()) 
+    {
+        postfix << operators.top().value << " ";
+        operators.pop();
+    }
+
+    return postfix.str();
+}
+
 int main()
+
 {///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
 	LinkedList<string> lst;
+
+    
+
     setlocale(LC_ALL, "Russian");
 	//добавляем 4 элемента в наш список 
 	lst.add_first("ооооо");
@@ -371,6 +503,15 @@ int main()
         cout << d[i] << "\n";
     }
     cout << "размер масcива "<<d.size() << "\n\n";
+    cout << "Введите инфиксное выражение: ";
+
+    string infixExpression;
+    getline(cin, infixExpression);
+
+    string postfixExpression = infixToPostfix(infixExpression);
+
+    cout << "Постфиксное выражение: " << postfixExpression << "\n";
+
     SetConsoleTextAttribute(Output, 12);
     cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
     SetConsoleTextAttribute(Output, 7);
