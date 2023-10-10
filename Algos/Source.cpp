@@ -346,15 +346,16 @@ public:
 
     ~Stack() {}
 
-    void push(T data) {
+    void add(T data) // добавляем в стек
+    {
         list.add_first(data);
     }
 
-    void pop() {
+    void delete_el() {
         list.delete_first();
     }
 
-    T top() const {//полчаем инфу 
+    T get() const {//полчаем инфу 
         if (list.head != nullptr) {
             return list.head->data;
         }
@@ -386,23 +387,30 @@ public:
     Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}
 };
 
-bool isOperatorOrPower(const string& token) {
+bool Operator_check(const string& token) {
     return token == "+" || token == "-" || token == "*" || token == "/" || token == "^";
 }
 
-bool isFunction(const string& token) {
+bool Func_check(const string& token) {
     return token == "sin" || token == "cos";
 }
 
-int getOperatorOrPowerPriority(const string& op) {
+int OperatorPriority(const string& op) {
     if (op == "+" || op == "-")
         return 1;
-    else if (op == "*" || op == "/")
+    if (op == "*" || op == "/")
         return 2;
-    else if (op == "^")
+    if (op == "^")
         return 3;
     else
         return 0;
+}
+int FuncPriority(const string& op) {
+    if (op == "cos" || op == "sin")
+        return 2;
+    else
+        return 0;
+
 }
 
 string infixToPostfix(const string& infixExpression) {
@@ -413,37 +421,43 @@ string infixToPostfix(const string& infixExpression) {
     string token;
     while (ss >> token) //пока есть что считывать
     {
-        if (std::isdigit(token[0]) || (token.size() > 1 && std::isdigit(token[1]))) {
+        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
             postfix << token << " ";
         }
-        else if (isOperatorOrPower(token) || isFunction(token))// проверка на различные операторы 
-        {
-            while (!operators.empty() && (operators.top().type == Token::OPERATOR || operators.top().type == Token::FUNCTION) && getOperatorOrPowerPriority(operators.top().value) >= getOperatorOrPowerPriority(token)) 
+        else if (Operator_check(token) || Func_check(token))// проверка на различные операторы 
+            if (Func_check(token)) 
             {
-                postfix << operators.top().value << " ";
-                operators.pop();
+                operators.add(Token(Token::FUNCTION, token));
             }
-            operators.push(Token(Token::OPERATOR, token));
-        }
+            else 
+            {
+                while (!operators.empty() && (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) && OperatorPriority(operators.get().value) >= OperatorPriority(token) && FuncPriority(operators.get().value) == 0) {
+                    postfix << operators.get().value << " ";
+                    operators.delete_el();
+                }
+                operators.add(Token(Token::OPERATOR, token));
+            }
+       
+        
         else if (token == "(") 
         {
-            operators.push(Token(Token::OPEN_PARENTHESIS, token));
+            operators.add(Token(Token::OPEN_PARENTHESIS, token));
         }
         else if (token == ")") 
         {
-            while (!operators.empty() && operators.top().type != Token::OPEN_PARENTHESIS) 
+            while (!operators.empty() && operators.get().type != Token::OPEN_PARENTHESIS) 
             {
-                postfix << operators.top().value << " ";
-                operators.pop();
+                postfix << operators.get().value << " ";
+                operators.delete_el();
             }
-            operators.pop(); // Убираем открывающую скобку
+            operators.delete_el(); // Убираем открывающую скобку
         }
     }
 
     while (!operators.empty()) 
     {
-        postfix << operators.top().value << " ";
-        operators.pop();
+        postfix << operators.get().value << " ";
+        operators.delete_el();
     }
 
     return postfix.str();
