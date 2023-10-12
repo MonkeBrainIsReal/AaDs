@@ -9,10 +9,7 @@ using namespace std;
 HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
 
 
-
-
-template<typename T>
-class DArray
+template<typename T> class DArray
 {
 private:
     int cap;
@@ -136,8 +133,8 @@ public:
     }
 };
 
-template<typename T>
-class Node {
+
+template<typename T> class Node {
 public:
     Node* prev;
     T data;
@@ -149,6 +146,7 @@ public:
         this->prev = this->next = nullptr;
     }
 };
+
 
 template <typename T> class LinkedList {
 public:
@@ -330,8 +328,7 @@ public:
 };
 
 
-template <typename T>
-class Stack {
+template <typename T> class Stack {
 private:
     LinkedList<T> list;
 
@@ -387,6 +384,7 @@ public:
     Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}
 };
 
+
 bool Operator_check(const string& token) {
     return token == "+" || token == "-" || token == "*" || token == "/" || token == "^";
 }
@@ -405,6 +403,7 @@ int OperatorPriority(const string& op) {
     else
         return 0;
 }
+
 int FuncPriority(const string& op) {
     if (op == "cos" || op == "sin")
         return 2;
@@ -431,7 +430,8 @@ string infixToPostfix(const string& infixExpression) {
             }
             else 
             {
-                while (!operators.empty() && (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) && OperatorPriority(operators.get().value) >= OperatorPriority(token) && FuncPriority(operators.get().value) == 0) {
+                while (!operators.empty() && (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) && OperatorPriority(operators.get().value) >= OperatorPriority(token) && FuncPriority(operators.get().value) == 0) 
+                {
                     postfix << operators.get().value << " ";
                     operators.delete_el();
                 }
@@ -517,6 +517,9 @@ int main()
         cout << d[i] << "\n";
     }
     cout << "размер масcива "<<d.size() << "\n\n";
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
     cout << "¬ведите инфиксное выражение: ";
 
     string infixExpression;
