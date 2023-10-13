@@ -335,12 +335,6 @@ private:
 public:
     Stack() {}
 
-    // Конструктор копирования
-    Stack(const Stack& other) : list(other.list) {}
-
-    // Конструктор перемещения
-    Stack(Stack&& other) noexcept : list(std::move(other.list)) {}
-
     ~Stack() {}
 
     void add(T data) // добавляем в стек
@@ -381,7 +375,7 @@ public:
     Type type;
     string value;
 
-    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}
+    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//конструктор co значениями по умолчанию
 };
 
 
@@ -406,7 +400,7 @@ int OperatorPriority(const string& op) {
 
 int FuncPriority(const string& op) {
     if (op == "cos" || op == "sin")
-        return 2;
+        return 4;
     else
         return 0;
 
