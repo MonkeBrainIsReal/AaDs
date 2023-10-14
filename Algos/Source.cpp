@@ -52,7 +52,7 @@ public:
         delete[]this->arr;
 
         this->arr = tempArr;
-        //initialize(this->NumOfEl);
+       
 
 
     };
@@ -81,6 +81,7 @@ public:
         }
         return *this->arr[index];
     };
+
     void insert(const T& element, int position)
     {
         if (position < 0 || position > this->NumOfEl)
