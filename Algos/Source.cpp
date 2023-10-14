@@ -23,8 +23,6 @@ public:
         this->NumOfEl = 0;
         this->arr = new T * [this->cap];
 
-        initialize(this->NumOfEl);
-
     };
 
     ~DArray()
@@ -36,13 +34,6 @@ public:
         delete[]this->arr;
     };
 
-    void initialize(int from)
-    {
-        for (int i = from; i < cap; i++)
-        {
-            this->arr[i] = nullptr;//заполняем массивыч 0
-        }
-    };
 
    void expand()//функцция для расширения нашего массива
     {
@@ -61,7 +52,7 @@ public:
         delete[]this->arr;
 
         this->arr = tempArr;
-        initialize(this->NumOfEl);
+        //initialize(this->NumOfEl);
 
 
     };
@@ -377,7 +368,6 @@ public:
 
     Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//конструктор co значениями по умолчанию
 };
-
 
 bool Operator_check(const string& token) {
     return token == "+" || token == "-" || token == "*" || token == "/" || token == "^";
