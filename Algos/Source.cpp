@@ -477,7 +477,8 @@ double Token::toDouble()
     }
 }
 
-double applyOperator(double operand1, double operand2, const string& op) {
+double applyOperator(double operand1, double operand2, const string& op) // супер красавчик работает как часы
+{
     if (op == "+") 
     {
         return operand1 + operand2;
@@ -594,8 +595,6 @@ int main()
 
 {///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
 	LinkedList<string> lst;
-
-    
 
     setlocale(LC_ALL, "Russian");
 	//добавляем 4 элемента в наш список 
