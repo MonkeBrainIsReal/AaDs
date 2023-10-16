@@ -484,11 +484,11 @@ double applyOperator(double operand1, double operand2, const string& op) {
         return operand1 * operand2;
     }
     else if (op == "/") {
-        if (operand2 != 0.0) {
+        if (operand2 != 0) {
             return operand1 / operand2;
         }
         else {
-            cout << "Error: Division by zero." << endl;
+            cout << "Ошибка: Деление на 0." << endl;
             exit(EXIT_FAILURE);
         }
     }
@@ -496,7 +496,7 @@ double applyOperator(double operand1, double operand2, const string& op) {
         return pow(operand1, operand2);
     }
     else {
-        cout << "Error: Unknown operator." << endl;
+        cout << "Ошибка: Неизвестный оператор." << endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -509,39 +509,54 @@ double applyFunction(double operand, const string& func) {
         return cos(operand);
     }
     else {
-        cout << "Error: Unknown function." << endl;
+        cout << "Ошибка: Неизвестная функция." << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-double evaluatePostfix(const string& postfixExpression) {
+double evaluatePostfix(const string& postfixExpression) // функция говна надо фиксить
+
+{
     stringstream ss(postfixExpression);
     Stack<Token> operands;
-
     string token;
-    while (ss >> token) {
-        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
+
+    while (ss >> token) 
+    {
+        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) 
+        {
             operands.add(Token(Token::OPERAND, token));
         }
-        else if (Operator_check(token) || Func_check(token)) {
-            if (Func_check(token)) {
+        else if (Operator_check(token) || Func_check(token)) 
+        {
+            if (Func_check(token)) 
+            {
                 operands.add(Token(Token::FUNCTION, token));
             }
-   
+            else
+            {
+                if (operands.size() < 2)
+                {
+                    cout << "я не знаю такого оператора" << endl;
+                    exit(EXIT_FAILURE);
+                }
                 Token operand2 = operands.get();
                 operands.delete_el();
                 Token operand1 = operands.get();
                 operands.delete_el();
                 double result = applyOperator(operand1.toDouble(), operand2.toDouble(), token);
                 operands.add(Token(Token::OPERAND, to_string(result)));
-            
+            }
         }
-        else if (token == "(") {
+        else if (token == "(") 
+        {
             operands.add(Token(Token::OPEN_PARENTHESIS, token));
         }
-        else if (token == ")") {
-            while (!operands.empty() && operands.get().type != Token::OPEN_PARENTHESIS) {
-                cout << "Error: Mismatched parentheses." << endl;
+        else if (token == ")") 
+        {
+            while (!operands.empty() && operands.get().type != Token::OPEN_PARENTHESIS) 
+            {
+                cout << "Ошибка: недостающие скобки" << endl;
                 exit(EXIT_FAILURE);
             }
             operands.delete_el(); 
@@ -552,7 +567,7 @@ double evaluatePostfix(const string& postfixExpression) {
         return stod(operands.get().value);
     }
     else {
-        cout << "Error: Invalid postfix expression." << endl;
+        cout << "Чел.. Что ты высрал..." << endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -619,7 +634,7 @@ int main()
 
 
     ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
-    cout << "Введите инфиксное выражение: ";
+    cout << "Введите выражение: ";
 
     string infixExpression;
     getline(cin, infixExpression);
@@ -627,8 +642,8 @@ int main()
     string postfixExpression = infixToPostfix(infixExpression);
 
     cout << "Постфиксное выражение: " << postfixExpression << "\n";
-   /*double result = evaluatePostfix(postfixExpression);
-   cout << "Result: " << result << endl;*/
+   double result = evaluatePostfix(postfixExpression);
+   cout << "Результат: " << result << "\n";
 
     SetConsoleTextAttribute(Output, 12);
     cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
