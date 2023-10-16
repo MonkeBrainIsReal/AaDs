@@ -467,7 +467,7 @@ double Token::toDouble()
 {
     if (type == OPERAND)
     {
-        return stod(value);
+        return stod(value);//string to double
     }
     else
     {
