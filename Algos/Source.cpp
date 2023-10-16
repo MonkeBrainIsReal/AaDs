@@ -338,7 +338,7 @@ public:
         list.delete_first();
     }
 
-    T get() const {//полчаем инфу 
+    T get()  {//полчаем инфу 
         if (list.head != nullptr) {
             return list.head->data;
         }
@@ -351,7 +351,7 @@ public:
         return list.head == nullptr;
     }
 
-    int size() const {
+    int size()  {
         return list.size();
     }
 };
@@ -363,9 +363,22 @@ public:
     {
         OPERATOR, OPERAND, FUNCTION, OPEN_PARENTHESIS, CLOSE_PARENTHESIS 
     };
-
+    double toDouble() 
+    {
+        if (type == OPERAND) 
+        {
+            return stod(value);
+        }
+        else 
+        {
+            // в случае попытки преобразования оператора или функции
+            cout << "Error: Cannot convert operator or function to double." << endl;
+            return 0;  
+        }
+    }
     Type type;
     string value;
+
 
     Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//конструктор co значениями по умолчанию
 };
@@ -397,40 +410,45 @@ int FuncPriority(const string& op) {
 
 }
 
-string infixToPostfix(const string& infixExpression) {
+string infixToPostfix(const string& infixExpression)
+{
     stringstream ss(infixExpression);
     Stack<Token> operators;
     stringstream postfix;
-
     string token;
+    int openParenthesisCount = 0;
+    int closeParenthesisCount = 0;
+
     while (ss >> token) //пока есть что считывать
     {
         if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
             postfix << token << " ";
         }
         else if (Operator_check(token) || Func_check(token))// проверка на различные операторы 
-            if (Func_check(token)) 
+        {
+            if (Func_check(token))
             {
                 operators.add(Token(Token::FUNCTION, token));
             }
-            else 
+            else
             {
-                while (!operators.empty() && (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) && OperatorPriority(operators.get().value) >= OperatorPriority(token) && FuncPriority(operators.get().value) == 0) 
+                while (!operators.empty() && (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) && OperatorPriority(operators.get().value) >= OperatorPriority(token) && FuncPriority(operators.get().value) == 0)
                 {
                     postfix << operators.get().value << " ";
                     operators.delete_el();
                 }
                 operators.add(Token(Token::OPERATOR, token));
             }
-       
-        
-        else if (token == "(") 
+        }
+        else if (token == "(")
         {
             operators.add(Token(Token::OPEN_PARENTHESIS, token));
+            openParenthesisCount++;
         }
-        else if (token == ")") 
+        else if (token == ")")
         {
-            while (!operators.empty() && operators.get().type != Token::OPEN_PARENTHESIS) 
+            closeParenthesisCount++;
+            while (!operators.empty() && operators.get().type != Token::OPEN_PARENTHESIS)
             {
                 postfix << operators.get().value << " ";
                 operators.delete_el();
@@ -439,14 +457,110 @@ string infixToPostfix(const string& infixExpression) {
         }
     }
 
-    while (!operators.empty()) 
+    while (!operators.empty())
     {
         postfix << operators.get().value << " ";
         operators.delete_el();
     }
 
+    if (openParenthesisCount != closeParenthesisCount || openParenthesisCount > 1 || closeParenthesisCount > 1) {
+        cout << "Ошибка: недостающие скобки" << endl;
+        return 0;  // или другое значение, указывающее на ошибку
+    }
+
     return postfix.str();
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+double applyOperator(double operand1, double operand2, const string& op) {
+    if (op == "+") {
+        return operand1 + operand2;
+    }
+    else if (op == "-") {
+        return operand1 - operand2;
+    }
+    else if (op == "*") {
+        return operand1 * operand2;
+    }
+    else if (op == "/") {
+        if (operand2 != 0.0) {
+            return operand1 / operand2;
+        }
+        else {
+            cout << "Error: Division by zero." << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if (op == "^") {
+        return pow(operand1, operand2);
+    }
+    else {
+        cout << "Error: Unknown operator." << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+double applyFunction(double operand, const string& func) {
+    if (func == "sin") {
+        return sin(operand);
+    }
+    else if (func == "cos") {
+        return cos(operand);
+    }
+    else {
+        cout << "Error: Unknown function." << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+double evaluatePostfix(const string& postfixExpression) {
+    stringstream ss(postfixExpression);
+    Stack<Token> operands;
+
+    string token;
+    while (ss >> token) {
+        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
+            operands.add(Token(Token::OPERAND, token));
+        }
+        else if (Operator_check(token) || Func_check(token)) {
+            if (Func_check(token)) {
+                operands.add(Token(Token::FUNCTION, token));
+            }
+   
+                Token operand2 = operands.get();
+                operands.delete_el();
+                Token operand1 = operands.get();
+                operands.delete_el();
+                double result = applyOperator(operand1.toDouble(), operand2.toDouble(), token);
+                operands.add(Token(Token::OPERAND, to_string(result)));
+            
+        }
+        else if (token == "(") {
+            operands.add(Token(Token::OPEN_PARENTHESIS, token));
+        }
+        else if (token == ")") {
+            while (!operands.empty() && operands.get().type != Token::OPEN_PARENTHESIS) {
+                cout << "Error: Mismatched parentheses." << endl;
+                exit(EXIT_FAILURE);
+            }
+            operands.delete_el(); 
+        }
+    }
+
+    if (operands.size() == 1) {
+        return stod(operands.get().value);
+    }
+    else {
+        cout << "Error: Invalid postfix expression." << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 int main()
 
@@ -513,6 +627,8 @@ int main()
     string postfixExpression = infixToPostfix(infixExpression);
 
     cout << "Постфиксное выражение: " << postfixExpression << "\n";
+   /*double result = evaluatePostfix(postfixExpression);
+   cout << "Result: " << result << endl;*/
 
     SetConsoleTextAttribute(Output, 12);
     cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
