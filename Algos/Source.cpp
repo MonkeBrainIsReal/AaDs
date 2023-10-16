@@ -471,8 +471,8 @@ double Token::toDouble()
     }
     else
     {
-        // в случае попытки преобразования оператора или функции
-        cout << "Error: Cannot convert operator or function to double." << endl;
+        
+        cout << "Ошибка: Не могу преобразовать." << endl;// в случае попытки преобразования оператора или функции
         return 0;
     }
 }
