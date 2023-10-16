@@ -17,7 +17,7 @@ private:
     T** arr;
 public:
 
-    DArray(int size = 6)//базовый конструктор с каким то случайным размером
+    DArray(int size = 6)//ГЎГ Г§Г®ГўГ»Г© ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° Г± ГЄГ ГЄГЁГ¬ ГІГ® Г±Г«ГіГ·Г Г©Г­Г»Г¬ Г°Г Г§Г¬ГҐГ°Г®Г¬
     {
         this->cap = size;
         this->NumOfEl = 0;
@@ -35,7 +35,7 @@ public:
     };
 
 
-   void expand()//функцция для расширения нашего массива
+   void expand()//ГґГіГ­ГЄГ¶Г¶ГЁГї Г¤Г«Гї Г°Г Г±ГёГЁГ°ГҐГ­ГЁГї Г­Г ГёГҐГЈГ® Г¬Г Г±Г±ГЁГўГ 
     {
         this->cap *= 2;
         T** tempArr = new T * [this->cap];
@@ -47,7 +47,7 @@ public:
 
         for (int i = 0; i < NumOfEl; i++)
         {
-            delete this->arr[i];//подчищаем все элементы массива
+            delete this->arr[i];//ГЇГ®Г¤Г·ГЁГ№Г ГҐГ¬ ГўГ±ГҐ ГЅГ«ГҐГ¬ГҐГ­ГІГ» Г¬Г Г±Г±ГЁГўГ 
         }
         delete[]this->arr;
 
@@ -57,7 +57,7 @@ public:
 
     };
 
-   void push(const T& element)//добавление элемента в начало массива
+   void push(const T& element)//Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ ГЅГ«ГҐГ¬ГҐГ­ГІГ  Гў Г­Г Г·Г Г«Г® Г¬Г Г±Г±ГЁГўГ 
     {
 
         if (this->NumOfEl >= this->cap)
@@ -73,7 +73,7 @@ public:
         return this->NumOfEl;
     }
 
-    T& operator [](const int index)//вместо функции get, будет оператор который возвращает значение по индексу 
+    T& operator [](const int index)//ГўГ¬ГҐГ±ГІГ® ГґГіГ­ГЄГ¶ГЁГЁ get, ГЎГіГ¤ГҐГІ Г®ГЇГҐГ°Г ГІГ®Г° ГЄГ®ГІГ®Г°Г»Г© ГўГ®Г§ГўГ°Г Г№Г ГҐГІ Г§Г­Г Г·ГҐГ­ГЁГҐ ГЇГ® ГЁГ­Г¤ГҐГЄГ±Гі 
     {
         if (index < 0 || index >= this->NumOfEl)
         {
@@ -94,13 +94,13 @@ public:
             this->expand();
         }
 
-        // Сдвигаем элементы вправо для освобождения места под новый элемент
+        // Г‘Г¤ГўГЁГЈГ ГҐГ¬ ГЅГ«ГҐГ¬ГҐГ­ГІГ» ГўГЇГ°Г ГўГ® Г¤Г«Гї Г®Г±ГўГ®ГЎГ®Г¦Г¤ГҐГ­ГЁГї Г¬ГҐГ±ГІГ  ГЇГ®Г¤ Г­Г®ГўГ»Г© ГЅГ«ГҐГ¬ГҐГ­ГІ
         for (int i = this->NumOfEl; i > position; --i)
         {
             this->arr[i] = this->arr[i - 1];
         }
 
-        // Вставляем новый элемент
+        // Г‚Г±ГІГ ГўГ«ГїГҐГ¬ Г­Г®ГўГ»Г© ГЅГ«ГҐГ¬ГҐГ­ГІ
         this->arr[position] = new T(element);
         ++this->NumOfEl;
     }
@@ -111,16 +111,16 @@ public:
             throw("Invalid index");
         }
 
-        // Освобождаем память, выделенную под элемент, который мы удаляем
+        // ГЋГ±ГўГ®ГЎГ®Г¦Г¤Г ГҐГ¬ ГЇГ Г¬ГїГІГј, ГўГ»Г¤ГҐГ«ГҐГ­Г­ГіГѕ ГЇГ®Г¤ ГЅГ«ГҐГ¬ГҐГ­ГІ, ГЄГ®ГІГ®Г°Г»Г© Г¬Г» ГіГ¤Г Г«ГїГҐГ¬
         delete this->arr[index];
 
-        // Сдвигаем элементы влево для заполнения пустого места
+        // Г‘Г¤ГўГЁГЈГ ГҐГ¬ ГЅГ«ГҐГ¬ГҐГ­ГІГ» ГўГ«ГҐГўГ® Г¤Г«Гї Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї ГЇГіГ±ГІГ®ГЈГ® Г¬ГҐГ±ГІГ 
         for (int i = index; i < this->NumOfEl - 1; ++i)
         {
             this->arr[i] = this->arr[i + 1];
         }
 
-        // Уменьшаем количество элементов в массиве
+        // Г“Г¬ГҐГ­ГјГёГ ГҐГ¬ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў Гў Г¬Г Г±Г±ГЁГўГҐ
         --this->NumOfEl;
     }
 };
@@ -145,7 +145,7 @@ public:
     Node<T>* head, * tail;
 
 public:
-    LinkedList() //конструктор
+    LinkedList() //ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°
     {
         head = tail = NULL;
     }
@@ -220,7 +220,7 @@ public:
         if (index < 0)
             return nullptr;
         int listSize = size();
-        if (index > listSize / 2) //проверка на позицию элемента
+        if (index > listSize / 2) //ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  ГЇГ®Г§ГЁГ¶ГЁГѕ ГЅГ«ГҐГ¬ГҐГ­ГІГ 
         {
             Node<T>* ptr = tail;
             int count = listSize - 1;
@@ -288,7 +288,7 @@ public:
     void remove_current(const T& data)
     {
         Node<T>* current = head;
-        while (current != nullptr && current->data != data)// ищем узел с конкретным значением 
+        while (current != nullptr && current->data != data)// ГЁГ№ГҐГ¬ ГіГ§ГҐГ« Г± ГЄГ®Г­ГЄГ°ГҐГІГ­Г»Г¬ Г§Г­Г Г·ГҐГ­ГЁГҐГ¬ 
         {
             current = current->next;
         }
@@ -329,7 +329,7 @@ public:
 
     ~Stack() {}
 
-    void add(T data) // добавляем в стек
+    void add(T data) // Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Гў Г±ГІГҐГЄ
     {
         list.add_first(data);
     }
@@ -338,7 +338,7 @@ public:
         list.delete_first();
     }
 
-    T get()  {//полчаем инфу 
+    T get()  {//ГЇГ®Г«Г·Г ГҐГ¬ ГЁГ­ГґГі 
         if (list.head != nullptr) {
             return list.head->data;
         }
@@ -368,7 +368,7 @@ public:
     string value;
     double toDouble();
 
-    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//конструктор co значениями по умолчанию
+    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° co Г§Г­Г Г·ГҐГ­ГЁГїГ¬ГЁ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ
 };
 
 bool Operator_check(const string& token) {
@@ -409,12 +409,12 @@ string infixToPostfix(const string& infixExpression)
     int openParenthesisCount = 0;
     int closeParenthesisCount = 0;
 
-    while (ss >> token) //пока есть что считывать
+    while (ss >> token) //ГЇГ®ГЄГ  ГҐГ±ГІГј Г·ГІГ® Г±Г·ГЁГІГ»ГўГ ГІГј
     {
         if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
             postfix << token << " ";
         }
-        else if (Operator_check(token) || Func_check(token))// проверка на различные операторы 
+        else if (Operator_check(token) || Func_check(token))// ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г°Г Г§Г«ГЁГ·Г­Г»ГҐ Г®ГЇГҐГ°Г ГІГ®Г°Г» 
         {
             if (Func_check(token))
             {
@@ -443,7 +443,7 @@ string infixToPostfix(const string& infixExpression)
                 postfix << operators.get().value << " ";
                 operators.delete_el();
             }
-            operators.delete_el(); // Убираем открывающую скобку
+            operators.delete_el(); // Г“ГЎГЁГ°Г ГҐГ¬ Г®ГІГЄГ°Г»ГўГ ГѕГ№ГіГѕ Г±ГЄГ®ГЎГЄГі
         }
     }
 
@@ -454,8 +454,8 @@ string infixToPostfix(const string& infixExpression)
     }
 
     if (openParenthesisCount != closeParenthesisCount || openParenthesisCount > 1 || closeParenthesisCount > 1) {
-        cout << "Ошибка: недостающие скобки" << endl;
-        return 0;  // или другое значение, указывающее на ошибку
+        cout << "ГЋГёГЁГЎГЄГ : Г­ГҐГ¤Г®Г±ГІГ ГѕГ№ГЁГҐ Г±ГЄГ®ГЎГЄГЁ" << endl;
+        return 0;  // ГЁГ«ГЁ Г¤Г°ГіГЈГ®ГҐ Г§Г­Г Г·ГҐГ­ГЁГҐ, ГіГЄГ Г§Г»ГўГ ГѕГ№ГҐГҐ Г­Г  Г®ГёГЁГЎГЄГі
     }
 
     return postfix.str();
@@ -472,12 +472,12 @@ double Token::toDouble()
     else
     {
         
-        cout << "Ошибка: Не могу преобразовать." << endl;// в случае попытки преобразования оператора или функции
+        cout << "ГЋГёГЁГЎГЄГ : ГЌГҐ Г¬Г®ГЈГі ГЇГ°ГҐГ®ГЎГ°Г Г§Г®ГўГ ГІГј." << endl;// Гў Г±Г«ГіГ·Г ГҐ ГЇГ®ГЇГ»ГІГЄГЁ ГЇГ°ГҐГ®ГЎГ°Г Г§Г®ГўГ Г­ГЁГї Г®ГЇГҐГ°Г ГІГ®Г°Г  ГЁГ«ГЁ ГґГіГ­ГЄГ¶ГЁГЁ
         return 0;
     }
 }
 
-double applyOperator(double operand1, double operand2, const string& op) // супер красавчик работает как часы
+double applyOperator(double operand1, double operand2, const string& op) // Г±ГіГЇГҐГ° ГЄГ°Г Г±Г ГўГ·ГЁГЄ Г°Г ГЎГ®ГІГ ГҐГІ ГЄГ ГЄ Г·Г Г±Г»
 {
     if (op == "+") 
     {
@@ -499,7 +499,7 @@ double applyOperator(double operand1, double operand2, const string& op) // супе
         }
         else 
         {
-            cout << "Ошибка: Деление на 0." << endl;
+            cout << "ГЋГёГЁГЎГЄГ : Г„ГҐГ«ГҐГ­ГЁГҐ Г­Г  0." << endl;
             exit(EXIT_FAILURE);
         }
     }
@@ -509,12 +509,12 @@ double applyOperator(double operand1, double operand2, const string& op) // супе
     }
     else 
     {
-        cout << "Ошибка: Неизвестный оператор." << endl;
+        cout << "ГЋГёГЁГЎГЄГ : ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г»Г© Г®ГЇГҐГ°Г ГІГ®Г°." << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-double applyFunction(double operand, const string& func) //не работает
+double applyFunction(double operand, const string& func) //Г­ГҐ Г°Г ГЎГ®ГІГ ГҐГІ
 {
     if (func == "sin") 
     {
@@ -526,12 +526,12 @@ double applyFunction(double operand, const string& func) //не работает
     }
     else 
     {
-        cout << "Ошибка: Неизвестная функция." << endl;
+        cout << "ГЋГёГЁГЎГЄГ : ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї ГґГіГ­ГЄГ¶ГЁГї." << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-double evaluatePostfix(const string& postfixExpression) // функция говна надо фиксить
+double evaluatePostfix(const string& postfixExpression) // ГґГіГ­ГЄГ¶ГЁГї ГЈГ®ГўГ­Г  Г­Г Г¤Г® ГґГЁГЄГ±ГЁГІГј
 
 {
     stringstream ss(postfixExpression);
@@ -568,7 +568,7 @@ double evaluatePostfix(const string& postfixExpression) // функция говна надо фи
         {
             while (!operands.empty() && operands.get().type != Token::OPEN_PARENTHESIS) 
             {
-                cout << "Ошибка: недостающие скобки" << endl;
+                cout << "ГЋГёГЁГЎГЄГ : Г­ГҐГ¤Г®Г±ГІГ ГѕГ№ГЁГҐ Г±ГЄГ®ГЎГЄГЁ" << endl;
                 exit(EXIT_FAILURE);
             }
             operands.delete_el(); 
@@ -581,7 +581,7 @@ double evaluatePostfix(const string& postfixExpression) // функция говна надо фи
     }
     else 
     {
-        cout << "Чел.. Что ты высрал..." << endl;
+        cout << "cringe.." << endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -593,42 +593,42 @@ double evaluatePostfix(const string& postfixExpression) // функция говна надо фи
 
 int main()
 
-{///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
+{///////////////////////////////////////////////////////////////////////////////////////// Г’Г…Г‘Г’ Г‘ГЏГ€Г‘ГЉГЂ
 	LinkedList<string> lst;
 
     setlocale(LC_ALL, "Russian");
-	//добавляем 4 элемента в наш список 
-	lst.add_first("ооооо");
-	lst.add_last("великий");
-	lst.add_last("суп");
-	lst.add_last("наварили");
-	//выводим часть из них чтобы проверить функцию добавления
+	//Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ 4 ГЅГ«ГҐГ¬ГҐГ­ГІГ  Гў Г­Г Гё Г±ГЇГЁГ±Г®ГЄ 
+	lst.add_first("Г®Г®Г®Г®Г®");
+	lst.add_last("ГўГҐГ«ГЁГЄГЁГ©");
+	lst.add_last("Г±ГіГЇ");
+	lst.add_last("Г­Г ГўГ Г°ГЁГ«ГЁ");
+	//ГўГ»ГўГ®Г¤ГЁГ¬ Г·Г Г±ГІГј ГЁГ§ Г­ГЁГµ Г·ГІГ®ГЎГ» ГЇГ°Г®ГўГҐГ°ГЁГІГј ГґГіГ­ГЄГ¶ГЁГѕ Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГї
 	cout << lst.get(0)->data << "\n";
 	cout << lst.get(1)->data << "\n";
 	cout << lst.get(2)->data << "\n";
     cout << lst.get(3)->data << "\n\n";
-	//дополним список 2 новыми элементами и выведем весь список на экран 
-	lst.insert(5, "ШИКАРНЫЙ");
-	lst.insert(6, "Наварили?");
+	//Г¤Г®ГЇГ®Г«Г­ГЁГ¬ Г±ГЇГЁГ±Г®ГЄ 2 Г­Г®ГўГ»Г¬ГЁ ГЅГ«ГҐГ¬ГҐГ­ГІГ Г¬ГЁ ГЁ ГўГ»ГўГҐГ¤ГҐГ¬ ГўГҐГ±Гј Г±ГЇГЁГ±Г®ГЄ Г­Г  ГЅГЄГ°Г Г­ 
+	lst.insert(5, "ГГ€ГЉГЂГђГЌГ›Г‰");
+	lst.insert(6, "ГЌГ ГўГ Г°ГЁГ«ГЁ?");
 	for (int i =0 ;i<lst.size();i++)
 		cout << lst[i]->data << " ";
-    cout <<"\n" << "размер списка  " << lst.size() << "\n";
+    cout <<"\n" << "Г°Г Г§Г¬ГҐГ° Г±ГЇГЁГ±ГЄГ   " << lst.size() << "\n";
 	cout << "\n\n";
-	//теперь проверим функцию удаления и выведем список после удаления нескольких элементов
+	//ГІГҐГЇГҐГ°Гј ГЇГ°Г®ГўГҐГ°ГЁГ¬ ГґГіГ­ГЄГ¶ГЁГѕ ГіГ¤Г Г«ГҐГ­ГЁГї ГЁ ГўГ»ГўГҐГ¤ГҐГ¬ Г±ГЇГЁГ±Г®ГЄ ГЇГ®Г±Г«ГҐ ГіГ¤Г Г«ГҐГ­ГЁГї Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў
 	lst.erase(0);
     lst.erase(3);
 	lst.erase(5);
-	lst.erase(7);//ничего не удалится тк это несуществующий элемент
+	lst.erase(7);//Г­ГЁГ·ГҐГЈГ® Г­ГҐ ГіГ¤Г Г«ГЁГІГ±Гї ГІГЄ ГЅГІГ® Г­ГҐГ±ГіГ№ГҐГ±ГІГўГіГѕГ№ГЁГ© ГЅГ«ГҐГ¬ГҐГ­ГІ
 
-    lst.remove_current("Наварили?");
+    lst.remove_current("ГЌГ ГўГ Г°ГЁГ«ГЁ?");
 
 	for (int i = 0;i < lst.size();i++)
 		cout << lst[i]->data << " ";
 	cout << "\n";
-	cout << "размер списка  " << lst.size() << "\n\n\n";
+	cout << "Г°Г Г§Г¬ГҐГ° Г±ГЇГЁГ±ГЄГ   " << lst.size() << "\n\n\n";
    
    
-	///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ МАССИВА
+	///////////////////////////////////////////////////////////////////////////////////////// Г’Г…Г‘Г’ ГЊГЂГ‘Г‘Г€Г‚ГЂ
     DArray<int> d;
     d.push(666);
     d.push(777);
@@ -642,23 +642,23 @@ int main()
     for (int i = 0;i < d.size();i++) {
         cout << d[i] << "\n";
     }
-    cout << "размер масcива "<<d.size() << "\n\n";
+    cout << "Г°Г Г§Г¬ГҐГ° Г¬Г Г±cГЁГўГ  "<<d.size() << "\n\n";
 
 
     ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
-    cout << "Введите выражение: ";
+    cout << "Г‚ГўГҐГ¤ГЁГІГҐ ГўГ»Г°Г Г¦ГҐГ­ГЁГҐ: ";
 
     string infixExpression;
     getline(cin, infixExpression);
 
     string postfixExpression = infixToPostfix(infixExpression);
 
-    cout << "Постфиксное выражение: " << postfixExpression << "\n";
+    cout << "ГЏГ®Г±ГІГґГЁГЄГ±Г­Г®ГҐ ГўГ»Г°Г Г¦ГҐГ­ГЁГҐ: " << postfixExpression << "\n";
    double result = evaluatePostfix(postfixExpression);
-   cout << "Результат: " << result << "\n";
+   cout << "ГђГҐГ§ГіГ«ГјГІГ ГІ: " << result << "\n";
 
     SetConsoleTextAttribute(Output, 12);
-    cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
+    cout << "Г‘Г® Г±Г¬ГҐГ°ГІГјГѕ ГЅГІГ®ГЈГ® ГЇГҐГ°Г±Г®Г­Г Г¦Г  Г­ГЁГІГј ГўГ ГёГҐГ© Г±ГіГ¤ГјГЎГ» Г®ГЎГ°Г»ГўГ ГҐГІГ±Гї. Г‡Г ГЈГ°ГіГ§ГЁГІГҐ Г±Г®ГµГ°Г Г­ВёГ­Г­ГіГѕ ГЁГЈГ°Гі Г¤Г ГЎГ» ГўГ®Г±Г±ГІГ Г­Г®ГўГЁГІГј ГІГҐГ·ГҐГ­ГЁГҐ Г±ГіГ¤ГјГЎГ», ГЁГ«ГЁ Г¦ГЁГўГЁГІГҐ Г¤Г Г«ГјГёГҐ Гў ГЇГ°Г®ГЄГ«ГїГІГ®Г¬ Г¬ГЁГ°ГҐ, ГЄГ®ГІГ®Г°Г»Г© Г±Г Г¬ГЁ ГЁ Г±Г®Г§Г¤Г Г«ГЁ..." << "\n\n\n";
     SetConsoleTextAttribute(Output, 7);
     return 0;
 }
