@@ -363,22 +363,10 @@ public:
     {
         OPERATOR, OPERAND, FUNCTION, OPEN_PARENTHESIS, CLOSE_PARENTHESIS 
     };
-    double toDouble() 
-    {
-        if (type == OPERAND) 
-        {
-            return stod(value);
-        }
-        else 
-        {
-            // в случае попытки преобразования оператора или функции
-            cout << "Error: Cannot convert operator or function to double." << endl;
-            return 0;  
-        }
-    }
+    
     Type type;
     string value;
-
+    double toDouble();
 
     Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//конструктор co значениями по умолчанию
 };
@@ -390,6 +378,8 @@ bool Operator_check(const string& token) {
 bool Func_check(const string& token) {
     return token == "sin" || token == "cos";
 }
+
+
 
 int OperatorPriority(const string& op) {
     if (op == "+" || op == "-")
@@ -473,42 +463,68 @@ string infixToPostfix(const string& infixExpression)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+double Token::toDouble()
+{
+    if (type == OPERAND)
+    {
+        return stod(value);
+    }
+    else
+    {
+        // в случае попытки преобразования оператора или функции
+        cout << "Error: Cannot convert operator or function to double." << endl;
+        return 0;
+    }
+}
+
 double applyOperator(double operand1, double operand2, const string& op) {
-    if (op == "+") {
+    if (op == "+") 
+    {
         return operand1 + operand2;
     }
-    else if (op == "-") {
+    else if (op == "-") 
+    {
         return operand1 - operand2;
     }
-    else if (op == "*") {
+    else if (op == "*") 
+    {
         return operand1 * operand2;
     }
-    else if (op == "/") {
-        if (operand2 != 0) {
+    else if (op == "/") 
+    {
+        if (operand2 != 0) 
+        {
             return operand1 / operand2;
         }
-        else {
+        else 
+        {
             cout << "Ошибка: Деление на 0." << endl;
             exit(EXIT_FAILURE);
         }
     }
-    else if (op == "^") {
+    else if (op == "^") 
+    {
         return pow(operand1, operand2);
     }
-    else {
+    else 
+    {
         cout << "Ошибка: Неизвестный оператор." << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-double applyFunction(double operand, const string& func) {
-    if (func == "sin") {
+double applyFunction(double operand, const string& func) //не работает
+{
+    if (func == "sin") 
+    {
         return sin(operand);
     }
-    else if (func == "cos") {
+    else if (func == "cos") 
+    {
         return cos(operand);
     }
-    else {
+    else 
+    {
         cout << "Ошибка: Неизвестная функция." << endl;
         exit(EXIT_FAILURE);
     }
@@ -535,11 +551,6 @@ double evaluatePostfix(const string& postfixExpression) // функция говна надо фи
             }
             else
             {
-                if (operands.size() < 2)
-                {
-                    cout << "я не знаю такого оператора" << endl;
-                    exit(EXIT_FAILURE);
-                }
                 Token operand2 = operands.get();
                 operands.delete_el();
                 Token operand1 = operands.get();
@@ -563,10 +574,12 @@ double evaluatePostfix(const string& postfixExpression) // функция говна надо фи
         }
     }
 
-    if (operands.size() == 1) {
+    if (operands.size() == 1) 
+    {
         return stod(operands.get().value);
     }
-    else {
+    else 
+    {
         cout << "Чел.. Что ты высрал..." << endl;
         exit(EXIT_FAILURE);
     }
