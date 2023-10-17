@@ -17,17 +17,17 @@ private:
 public:
     DArray(int size = 6) //базовый конструктор с каким то случайным размером
     {
-        
+
         cap = size;
         arr = new T[size];
     }
 
-    ~DArray() 
+    ~DArray()
     {
         delete[] arr;
     }
 
-    void expand() 
+    void expand()
     {
         cap *= 2;
         T* tempArr = new T[cap];
@@ -43,7 +43,7 @@ public:
 
     void push(const T& element)//добавляем малыша в конец массива 
     {
-        if (size >= cap) 
+        if (size >= cap)
         {
             expand();
         }
@@ -56,7 +56,7 @@ public:
 
     void insert(const T& element, int position) {
         if (position < 0 || position > size) {
-            cerr<<"Неверная позиция"<< "\n";
+            cerr << "Неверная позиция" << "\n";
         }
 
         if (size >= cap) {
@@ -72,7 +72,7 @@ public:
         ++size;
     }
 
-    void remove(int index) 
+    void remove(int index)
     {
         if (index >= size) {
             cerr << "Ошибка: индекс преисполнился и ушел за границы" << "\n";
@@ -86,11 +86,11 @@ public:
         --size;
     }
 
-    T& operator[](const int index) 
+    T& operator[](const int index)
     {
-        if (index < 0 || index >= size) 
+        if (index < 0 || index >= size)
         {
-            cerr<<"Ошибка: индекс преисполнился и ушел за границы"<<"\n";
+            cerr << "Ошибка: индекс преисполнился и ушел за границы" << "\n";
         }
         return arr[index];
     }
@@ -116,12 +116,12 @@ public:
     Node<T>* head, * tail;
 
 public:
-    LinkedList() //êîíñòðóêòîð
+    LinkedList() //конструктор
     {
         head = tail = NULL;
     }
 
-    ~LinkedList() 
+    ~LinkedList()
     {
         while (head != nullptr)
             delete_first();
@@ -191,7 +191,7 @@ public:
         if (index < 0)
             return nullptr;
         int listSize = size();
-        if (index > listSize / 2) //ïðîâåðêà íà ïîçèöèþ ýëåìåíòà
+        if (index > listSize / 2) //проверка на позицию элемента
         {
             Node<T>* ptr = tail;
             int count = listSize - 1;
@@ -203,7 +203,7 @@ public:
             }
             return ptr;
         }
-        else {  
+        else {
             Node<T>* ptr = head;
             int count = 0;
             while (count != index) {
@@ -259,7 +259,7 @@ public:
     void remove_current(const T& data)
     {
         Node<T>* current = head;
-        while (current != nullptr && current->data != data)// èùåì óçåë ñ êîíêðåòíûì çíà÷åíèåì 
+        while (current != nullptr && current->data != data)// ищем узел с конкретным значением 
         {
             current = current->next;
         }
@@ -301,7 +301,7 @@ public:
 
     ~Stack() {}
 
-    void add(T data) // äîáàâëÿåì â ñòåê
+    void add(T data) // добавляем в стек
     {
         list.add_first(data);
     }
@@ -310,7 +310,7 @@ public:
         list.delete_first();
     }
 
-    T get()  {//ïîë÷àåì èíôó 
+    T get() {//полчаем инфу 
         if (list.head != nullptr) {
             return list.head->data;
         }
@@ -323,22 +323,22 @@ public:
         return list.head == nullptr;
     }
 
-    int size()  {
+    int size() {
         return list.size();
     }
 };
 
 class Token {
 public:
-    enum Type 
+    enum Type
     {
-        OPERATOR, OPERAND, FUNCTION, OPEN_PARENTHESIS, CLOSE_PARENTHESIS 
+        OPERATOR, OPERAND, FUNCTION, OPEN_PARENTHESIS, CLOSE_PARENTHESIS
     };
-    
+
     Type type;
     string value;
 
-    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//êîíñòðóêòîð co çíà÷åíèÿìè ïî óìîë÷àíèþ
+    Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//конструктор co значениями по умолчанию
 };
 
 bool Operator_check(const string& token) {
@@ -377,12 +377,12 @@ string infixToPostfix(const string& infixExpression)
     int openParenthesisCount = 0;
     int closeParenthesisCount = 0;
 
-    while (ss >> token) //ïîêà åñòü ÷òî ñ÷èòûâàòü
+    while (ss >> token) //пока есть что считывать
     {
         if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
             postfix << token << " ";
         }
-        else if (Operator_check(token) || Func_check(token))// ïðîâåðêà íà ðàçëè÷íûå îïåðàòîðû 
+        else if (Operator_check(token) || Func_check(token))// проверка на различные операторы 
         {
             if (Func_check(token))
             {
@@ -411,7 +411,7 @@ string infixToPostfix(const string& infixExpression)
                 postfix << operators.get().value << " ";
                 operators.delete_el();
             }
-            operators.delete_el(); // Óáèðàåì îòêðûâàþùóþ ñêîáêó
+            operators.delete_el(); // Убираем открывающую скобку
         }
     }
 
@@ -422,8 +422,8 @@ string infixToPostfix(const string& infixExpression)
     }
 
     if (openParenthesisCount != closeParenthesisCount || openParenthesisCount > 1 || closeParenthesisCount > 1) {
-        cout << "Îøèáêà: íåäîñòàþùèå ñêîáêè" << endl;
-        return 0;  // èëè äðóãîå çíà÷åíèå, óêàçûâàþùåå íà îøèáêó
+        cout << "Ошибка: недостающие скобки" << endl;
+        return 0;  // или другое значение, указывающее на ошибку
     }
 
     return postfix.str();
@@ -431,20 +431,20 @@ string infixToPostfix(const string& infixExpression)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////Функция подсчета
 
-double magic(const string& Expression) 
+double magic(const string& Expression)
 {
     stringstream ss(Expression);
     Stack<double> stack;
 
     string token;
     while (ss >> token) {
-        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) 
+        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1])))
         {
             stack.add(stod(token));
         }
-        else if (Operator_check(token)) 
+        else if (Operator_check(token))
         {
-            if (stack.size() < 2) 
+            if (stack.size() < 2)
             {
                 cerr << "Ошибка: Недостаточно операндов для оператора " << token << "\n";
                 exit(EXIT_FAILURE);
@@ -454,7 +454,7 @@ double magic(const string& Expression)
             double operand1 = stack.get();
             stack.delete_el();
 
-            switch (token[0]) 
+            switch (token[0])
             {
             case '+':
                 stack.add(operand1 + operand2);
@@ -469,7 +469,7 @@ double magic(const string& Expression)
                 if (operand2 != 0) {
                     stack.add(operand1 / operand2);
                 }
-                else 
+                else
                 {
                     cerr << "Ошибка: Деление на 0." << "\n";
                     exit(EXIT_FAILURE);
@@ -483,9 +483,9 @@ double magic(const string& Expression)
                 exit(EXIT_FAILURE);
             }
         }
-        else if (Func_check(token)) 
+        else if (Func_check(token))
         {
-            if (stack.empty()) 
+            if (stack.empty())
             {
                 cerr << "Ошибка: Недостаточно операндов для функции " << token << "\n";
                 exit(EXIT_FAILURE);
@@ -493,16 +493,16 @@ double magic(const string& Expression)
             double operand = stack.get();
             stack.delete_el();
 
-            if (token == "cos") 
+            if (token == "cos")
             {
                 stack.add(cos(operand));
             }
-            else if (token == "sin") 
+            else if (token == "sin")
             {
                 stack.add(sin(operand));
             }
         }
-        else 
+        else
         {
             cerr << "Ошибка: Неизвестный токен в обратной польской записи." << "\n";
             exit(EXIT_FAILURE);
@@ -524,42 +524,42 @@ double magic(const string& Expression)
 
 int main()
 
-{///////////////////////////////////////////////////////////////////////////////////////// ÒÅÑÒ ÑÏÈÑÊÀ
-	LinkedList<string> lst;
+{///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
+    LinkedList<string> lst;
 
     setlocale(LC_ALL, "Russian");
-	//äîáàâëÿåì 4 ýëåìåíòà â íàø ñïèñîê 
-	lst.add_first("îîîîî");
-	lst.add_last("âåëèêèé");
-	lst.add_last("ñóï");
-	lst.add_last("íàâàðèëè");
-	//âûâîäèì ÷àñòü èç íèõ ÷òîáû ïðîâåðèòü ôóíêöèþ äîáàâëåíèÿ
-	cout << lst.get(0)->data << "\n";
-	cout << lst.get(1)->data << "\n";
-	cout << lst.get(2)->data << "\n";
+    //добавляем 4 элемента в наш список 
+    lst.add_first("ооооо");
+    lst.add_last("великий");
+    lst.add_last("суп");
+    lst.add_last("наварили");
+    //выводим часть из них чтобы проверить функцию добавления
+    cout << lst.get(0)->data << "\n";
+    cout << lst.get(1)->data << "\n";
+    cout << lst.get(2)->data << "\n";
     cout << lst.get(3)->data << "\n\n";
-	//äîïîëíèì ñïèñîê 2 íîâûìè ýëåìåíòàìè è âûâåäåì âåñü ñïèñîê íà ýêðàí 
-	lst.insert(5, "ØÈÊÀÐÍÛÉ");
-	lst.insert(6, "Íàâàðèëè?");
-	for (int i =0 ;i<lst.size();i++)
-		cout << lst[i]->data << " ";
-    cout <<"\n" << "ðàçìåð ñïèñêà  " << lst.size() << "\n";
-	cout << "\n\n";
-	//òåïåðü ïðîâåðèì ôóíêöèþ óäàëåíèÿ è âûâåäåì ñïèñîê ïîñëå óäàëåíèÿ íåñêîëüêèõ ýëåìåíòîâ
-	lst.erase(0);
+    //дополним список 2 новыми элементами и выведем весь список на экран 
+    lst.insert(5, "ШИКАРНЫЙ");
+    lst.insert(6, "Наварили?");
+    for (int i = 0;i < lst.size();i++)
+        cout << lst[i]->data << " ";
+    cout << "\n" << "размер списка  " << lst.size() << "\n";
+    cout << "\n\n";
+    //теперь проверим функцию удаления и выведем список после удаления нескольких элементов
+    lst.erase(0);
     lst.erase(3);
-	lst.erase(5);
-	lst.erase(7);//íè÷åãî íå óäàëèòñÿ òê ýòî íåñóùåñòâóþùèé ýëåìåíò
+    lst.erase(5);
+    lst.erase(7);//ничего не удалится тк это несуществующий элемент
 
-    lst.remove_current("Íàâàðèëè?");
+    lst.remove_current("Наварили?");
 
-	for (int i = 0;i < lst.size();i++)
-		cout << lst[i]->data << " ";
-	cout << "\n";
-	cout << "ðàçìåð ñïèñêà  " << lst.size() << "\n\n\n";
-   
-   
-	///////////////////////////////////////////////////////////////////////////////////////// ÒÅÑÒ ÌÀÑÑÈÂÀ
+    for (int i = 0;i < lst.size();i++)
+        cout << lst[i]->data << " ";
+    cout << "\n";
+    cout << "размер списка  " << lst.size() << "\n\n\n";
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ МАССИВА
     DArray<int> d;
     d.push(666);
     d.push(777);
@@ -575,11 +575,11 @@ int main()
     for (int i = 0;i < d.getsize();i++) {
         cout << d[i] << "\n";
     }
-    cout << "размер масcива "<<d.getsize() << "\n\n";
+    cout << "размер масcива " << d.getsize() << "\n\n";
 
 
     ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
-    cout << "Ââåäèòå âûðàæåíèå: ";
+    cout << "Введите выражение: ";
 
     string infixExpression;
     getline(cin, infixExpression);
@@ -587,11 +587,11 @@ int main()
     string postfixExpression = infixToPostfix(infixExpression);
 
     cout << "Постфиксное выражение: " << postfixExpression << "\n";
-   double result = magic(postfixExpression);
-   cout << "Результат: " << result << "\n";
+    double result = magic(postfixExpression);
+    cout << "Результат: " << result << "\n";
 
     SetConsoleTextAttribute(Output, 12);
-    cout << "Ñî ñìåðòüþ ýòîãî ïåðñîíàæà íèòü âàøåé ñóäüáû îáðûâàåòñÿ. Çàãðóçèòå ñîõðàí¸ííóþ èãðó äàáû âîññòàíîâèòü òå÷åíèå ñóäüáû, èëè æèâèòå äàëüøå â ïðîêëÿòîì ìèðå, êîòîðûé ñàìè è ñîçäàëè..." << "\n\n\n";
+    cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
     SetConsoleTextAttribute(Output, 7);
     return 0;
 }
