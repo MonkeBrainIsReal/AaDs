@@ -377,41 +377,42 @@ string infixToPostfix(const string& infixExpression)
     int openParenthesisCount = 0;
     int closeParenthesisCount = 0;
 
-    while (ss >> token) //пока есть что считывать
-    {
-        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) {
+    while (ss >> token) {
+        if (std::isdigit(token[0]) || (token.size() > 1 && std::isdigit(token[1]))) {
             postfix << token << " ";
         }
-        else if (Operator_check(token) || Func_check(token))// проверка на различные операторы 
-        {
-            if (Func_check(token))
-            {
+        else if (Operator_check(token) || Func_check(token)) {
+            if (Func_check(token)) {
                 operators.add(Token(Token::FUNCTION, token));
             }
-            else
-            {
-                while (!operators.empty() && (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) && OperatorPriority(operators.get().value) >= OperatorPriority(token) && FuncPriority(operators.get().value) == 0)
-                {
+            else {
+                while (!operators.empty() &&
+                    (operators.get().type == Token::OPERATOR || operators.get().type == Token::FUNCTION) &&
+                    OperatorPriority(operators.get().value) >= OperatorPriority(token) &&
+                    FuncPriority(operators.get().value) == 0) {
                     postfix << operators.get().value << " ";
                     operators.delete_el();
                 }
                 operators.add(Token(Token::OPERATOR, token));
             }
         }
-        else if (token == "(")
-        {
+        else if (token == "(") {
             operators.add(Token(Token::OPEN_PARENTHESIS, token));
             openParenthesisCount++;
         }
-        else if (token == ")")
-        {
+        else if (token == ")") {
             closeParenthesisCount++;
-            while (!operators.empty() && operators.get().type != Token::OPEN_PARENTHESIS)
-            {
+            while (!operators.empty() && operators.get().type != Token::OPEN_PARENTHESIS) {
                 postfix << operators.get().value << " ";
                 operators.delete_el();
             }
             operators.delete_el(); // Убираем открывающую скобку
+
+            //слишком тупой недочет
+            if (!operators.empty() && operators.get().type == Token::FUNCTION) {
+                postfix << operators.get().value << " ";
+                operators.delete_el();
+            }
         }
     }
 
@@ -518,7 +519,6 @@ double magic(const string& Expression)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 int main()
 
 {///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
@@ -555,7 +555,6 @@ int main()
     cout << "\n";
     cout << "размер списка  " << lst.size() << "\n\n\n";
 
-
     ///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ МАССИВА
     DArray<int> d;
     d.push(666);
@@ -569,11 +568,11 @@ int main()
     d.remove(6);
     d.insert(12345, 7);
     d.push(222);
-    for (int i = 0;i < d.getsize();i++) {
+    for (int i = 0;i < d.getsize();i++) 
+    {
         cout << d[i] << "\n";
     }
     cout << "размер масcива " << d.getsize() << "\n\n";
-
 
     ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
     cout << "Введите выражение: ";
