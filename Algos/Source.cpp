@@ -435,8 +435,8 @@ double magic(const string& Expression)
 {
     stringstream ss(Expression);
     Stack<double> stack;
-
     string token;
+
     while (ss >> token) {
         if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1])))
         {
@@ -504,11 +504,10 @@ double magic(const string& Expression)
         }
         else
         {
-            cerr << "Ошибка: Неизвестный токен в обратной польской записи." << "\n";
+            cerr << "Ошибка: Неизвестный токен." << "\n";
             exit(EXIT_FAILURE);
         }
     }
-
     if (stack.size() != 1) {
         cerr << "Ошибка: Неверное количество операндов." << "\n";
         exit(EXIT_FAILURE);
@@ -518,8 +517,6 @@ double magic(const string& Expression)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 int main()
