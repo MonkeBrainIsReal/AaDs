@@ -8,123 +8,95 @@
 using namespace std;
 HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
 
-
-template<typename T> class DArray
-{
+template<typename T> class DArray {
 private:
     int cap;
-    int NumOfEl;
-    T** arr;
+    int size;
+    T* arr;
+
 public:
-
-    DArray(int size = 6)//áàçîâûé êîíñòðóêòîð ñ êàêèì òî ñëó÷àéíûì ðàçìåðîì
+    DArray(int size = 6) //базовый конструктор с каким то случайным размером
     {
-        this->cap = size;
-        this->NumOfEl = 0;
-        this->arr = new T * [this->cap];
-
-    };
-
-    ~DArray()
-    {
-        for (int i = 0; i < NumOfEl; i++)
-        {
-            delete this->arr[i];
-        }
-        delete[]this->arr;
-    };
-
-
-   void expand()//ôóíêööèÿ äëÿ ðàñøèðåíèÿ íàøåãî ìàññèâà
-    {
-        this->cap *= 2;
-        T** tempArr = new T * [this->cap];
-
-        for (int i = 0;i < this->NumOfEl;i++)
-        {
-            tempArr[i] = new T(*this->arr[i]);
-        }
-
-        for (int i = 0; i < NumOfEl; i++)
-        {
-            delete this->arr[i];//ïîä÷èùàåì âñå ýëåìåíòû ìàññèâà
-        }
-        delete[]this->arr;
-
-        this->arr = tempArr;
-       
-
-
-    };
-
-   void push(const T& element)//äîáàâëåíèå ýëåìåíòà â íà÷àëî ìàññèâà
-    {
-
-        if (this->NumOfEl >= this->cap)
-        {
-            this->expand();
-        }
-
-        this->arr[this->NumOfEl++] = new T(element);
-    };
-
-    const int& size()const
-    {
-        return this->NumOfEl;
+        
+        cap = size;
+        arr = new T[size];
     }
 
-    T& operator [](const int index)//âìåñòî ôóíêöèè get, áóäåò îïåðàòîð êîòîðûé âîçâðàùàåò çíà÷åíèå ïî èíäåêñó 
+    ~DArray() 
     {
-        if (index < 0 || index >= this->NumOfEl)
-        {
-            throw("trying to access unallocated memory");
-        }
-        return *this->arr[index];
-    };
-
-    void insert(const T& element, int position)
-    {
-        if (position < 0 || position > this->NumOfEl)
-        {
-            throw("Invalid position");
-        }
-
-        if (this->NumOfEl >= this->cap)
-        {
-            this->expand();
-        }
-
-        // Ñäâèãàåì ýëåìåíòû âïðàâî äëÿ îñâîáîæäåíèÿ ìåñòà ïîä íîâûé ýëåìåíò
-        for (int i = this->NumOfEl; i > position; --i)
-        {
-            this->arr[i] = this->arr[i - 1];
-        }
-
-        // Âñòàâëÿåì íîâûé ýëåìåíò
-        this->arr[position] = new T(element);
-        ++this->NumOfEl;
+        delete[] arr;
     }
-    void remove(int index)
+
+    void expand() 
     {
-        if (index < 0 || index >= this->NumOfEl)
-        {
-            throw("Invalid index");
+        cap *= 2;
+        T* tempArr = new T[cap];
+
+        for (int i = 0; i < size; i++) {
+            tempArr[i] = arr[i];
         }
 
-        // Îñâîáîæäàåì ïàìÿòü, âûäåëåííóþ ïîä ýëåìåíò, êîòîðûé ìû óäàëÿåì
-        delete this->arr[index];
+        delete[] arr;
 
-        // Ñäâèãàåì ýëåìåíòû âëåâî äëÿ çàïîëíåíèÿ ïóñòîãî ìåñòà
-        for (int i = index; i < this->NumOfEl - 1; ++i)
+        arr = tempArr;//присваиваем указатель на новый массив
+    }
+
+    void push(const T& element)//добавляем малыша в конец массива 
+    {
+        if (size >= cap) 
         {
-            this->arr[i] = this->arr[i + 1];
+            expand();
+        }
+        arr[size++] = element;
+    }
+
+    const int& getsize() const {
+        return size;
+    }
+
+    void insert(const T& element, int position) {
+        if (position < 0 || position > size) {
+            cerr<<"Неверная позиция"<< "\n";
         }
 
-        // Óìåíüøàåì êîëè÷åñòâî ýëåìåíòîâ â ìàññèâå
-        --this->NumOfEl;
+        if (size >= cap) {
+            expand();
+        }
+
+        for (int i = size; i > position; --i) //cдвигаем элементы вправо начиная с конца массива для освобождения места под новый элемент
+        {
+            arr[i] = arr[i - 1];
+        }
+
+        arr[position] = element;
+        ++size;
+    }
+
+    void remove(int index) 
+    {
+        if (index >= size) {
+            cerr << "Ошибка: индекс преисполнился и ушел за границы" << "\n";
+            return;
+        }
+
+        for (int i = index; i < size - 1; ++i)//cдвигаем элементы влево для заполнения пустого места
+        {
+            arr[i] = arr[i + 1];
+        }
+        --size;
+    }
+
+    T& operator[](const int index) 
+    {
+        if (index < 0 || index >= size) 
+        {
+            cerr<<"Ошибка: индекс преисполнился и ушел за границы"<<"\n";
+        }
+        return arr[index];
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////Список
 
 template<typename T> class Node {
 public:
@@ -138,7 +110,6 @@ public:
         this->prev = this->next = nullptr;
     }
 };
-
 
 template <typename T> class LinkedList {
 public:
@@ -319,6 +290,7 @@ public:
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////Стек и все что связано с инфиксной/постфиксной записью
 
 template <typename T> class Stack {
 private:
@@ -356,7 +328,6 @@ public:
     }
 };
 
-
 class Token {
 public:
     enum Type 
@@ -366,7 +337,6 @@ public:
     
     Type type;
     string value;
-    double toDouble();
 
     Token(Type type = OPERAND, const string& value = "") : type(type), value(value) {}//êîíñòðóêòîð co çíà÷åíèÿìè ïî óìîë÷àíèþ
 };
@@ -378,8 +348,6 @@ bool Operator_check(const string& token) {
 bool Func_check(const string& token) {
     return token == "sin" || token == "cos";
 }
-
-
 
 int OperatorPriority(const string& op) {
     if (op == "+" || op == "-")
@@ -461,129 +429,92 @@ string infixToPostfix(const string& infixExpression)
     return postfix.str();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////Функция подсчета
 
-double Token::toDouble()
+double magic(const string& Expression) 
 {
-    if (type == OPERAND)
-    {
-        return stod(value);//string to double
-    }
-    else
-    {
-        
-        cout << "Îøèáêà: Íå ìîãó ïðåîáðàçîâàòü." << endl;// â ñëó÷àå ïîïûòêè ïðåîáðàçîâàíèÿ îïåðàòîðà èëè ôóíêöèè
-        return 0;
-    }
-}
+    stringstream ss(Expression);
+    Stack<double> stack;
 
-double applyOperator(double operand1, double operand2, const string& op) // ñóïåð êðàñàâ÷èê ðàáîòàåò êàê ÷àñû
-{
-    if (op == "+") 
-    {
-        return operand1 + operand2;
-    }
-    else if (op == "-") 
-    {
-        return operand1 - operand2;
-    }
-    else if (op == "*") 
-    {
-        return operand1 * operand2;
-    }
-    else if (op == "/") 
-    {
-        if (operand2 != 0) 
+    string token;
+    while (ss >> token) {
+        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) 
         {
-            return operand1 / operand2;
+            stack.add(stod(token));
+        }
+        else if (Operator_check(token)) 
+        {
+            if (stack.size() < 2) 
+            {
+                cerr << "Ошибка: Недостаточно операндов для оператора " << token << "\n";
+                exit(EXIT_FAILURE);
+            }
+            double operand2 = stack.get();
+            stack.delete_el();
+            double operand1 = stack.get();
+            stack.delete_el();
+
+            switch (token[0]) 
+            {
+            case '+':
+                stack.add(operand1 + operand2);
+                break;
+            case '-':
+                stack.add(operand1 - operand2);
+                break;
+            case '*':
+                stack.add(operand1 * operand2);
+                break;
+            case '/':
+                if (operand2 != 0) {
+                    stack.add(operand1 / operand2);
+                }
+                else 
+                {
+                    cerr << "Ошибка: Деление на 0." << "\n";
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case '^':
+                stack.add(pow(operand1, operand2));
+                break;
+            default:
+                cerr << "Ошибка: Неизвестный оператор." << "\n";
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (Func_check(token)) 
+        {
+            if (stack.empty()) 
+            {
+                cerr << "Ошибка: Недостаточно операндов для функции " << token << "\n";
+                exit(EXIT_FAILURE);
+            }
+            double operand = stack.get();
+            stack.delete_el();
+
+            if (token == "cos") 
+            {
+                stack.add(cos(operand));
+            }
+            else if (token == "sin") 
+            {
+                stack.add(sin(operand));
+            }
         }
         else 
         {
-            cout << "Îøèáêà: Äåëåíèå íà 0." << endl;
+            cerr << "Ошибка: Неизвестный токен в обратной польской записи." << "\n";
             exit(EXIT_FAILURE);
         }
     }
-    else if (op == "^") 
-    {
-        return pow(operand1, operand2);
-    }
-    else 
-    {
-        cout << "Îøèáêà: Íåèçâåñòíûé îïåðàòîð." << endl;
+
+    if (stack.size() != 1) {
+        cerr << "Ошибка: Неверное количество операндов." << "\n";
         exit(EXIT_FAILURE);
     }
-}
 
-double applyFunction(double operand, const string& func) //íå ðàáîòàåò
-{
-    if (func == "sin") 
-    {
-        return sin(operand);
-    }
-    else if (func == "cos") 
-    {
-        return cos(operand);
-    }
-    else 
-    {
-        cout << "Îøèáêà: Íåèçâåñòíàÿ ôóíêöèÿ." << endl;
-        exit(EXIT_FAILURE);
-    }
-}
-
-double evaluatePostfix(const string& postfixExpression) // ôóíêöèÿ ãîâíà íàäî ôèêñèòü
-
-{
-    stringstream ss(postfixExpression);
-    Stack<Token> operands;
-    string token;
-
-    while (ss >> token) 
-    {
-        if (isdigit(token[0]) || (token.size() > 1 && isdigit(token[1]))) 
-        {
-            operands.add(Token(Token::OPERAND, token));
-        }
-        else if (Operator_check(token) || Func_check(token)) 
-        {
-            if (Func_check(token)) 
-            {
-                operands.add(Token(Token::FUNCTION, token));
-            }
-            else
-            {
-                Token operand2 = operands.get();
-                operands.delete_el();
-                Token operand1 = operands.get();
-                operands.delete_el();
-                double result = applyOperator(operand1.toDouble(), operand2.toDouble(), token);
-                operands.add(Token(Token::OPERAND, to_string(result)));
-            }
-        }
-        else if (token == "(") 
-        {
-            operands.add(Token(Token::OPEN_PARENTHESIS, token));
-        }
-        else if (token == ")") 
-        {
-            while (!operands.empty() && operands.get().type != Token::OPEN_PARENTHESIS) 
-            {
-                cout << "Îøèáêà: íåäîñòàþùèå ñêîáêè" << endl;
-                exit(EXIT_FAILURE);
-            }
-            operands.delete_el(); 
-        }
-    }
-
-    if (operands.size() == 1) 
-    {
-        return stod(operands.get().value);
-    }
-    else 
-    {
-        cout << "cringe.." << endl;
-        exit(EXIT_FAILURE);
-    }
+    return stack.get();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -639,10 +570,12 @@ int main()
     d.push(222);
     d.insert(12345, 4);
     d.remove(6);
-    for (int i = 0;i < d.size();i++) {
+    d.insert(12345, 7);
+    d.push(222);
+    for (int i = 0;i < d.getsize();i++) {
         cout << d[i] << "\n";
     }
-    cout << "ðàçìåð ìàñcèâà "<<d.size() << "\n\n";
+    cout << "размер масcива "<<d.getsize() << "\n\n";
 
 
     ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
@@ -653,9 +586,9 @@ int main()
 
     string postfixExpression = infixToPostfix(infixExpression);
 
-    cout << "Ïîñòôèêñíîå âûðàæåíèå: " << postfixExpression << "\n";
-   double result = evaluatePostfix(postfixExpression);
-   cout << "Ðåçóëüòàò: " << result << "\n";
+    cout << "Постфиксное выражение: " << postfixExpression << "\n";
+   double result = magic(postfixExpression);
+   cout << "Результат: " << result << "\n";
 
     SetConsoleTextAttribute(Output, 12);
     cout << "Ñî ñìåðòüþ ýòîãî ïåðñîíàæà íèòü âàøåé ñóäüáû îáðûâàåòñÿ. Çàãðóçèòå ñîõðàí¸ííóþ èãðó äàáû âîññòàíîâèòü òå÷åíèå ñóäüáû, èëè æèâèòå äàëüøå â ïðîêëÿòîì ìèðå, êîòîðûé ñàìè è ñîçäàëè..." << "\n\n\n";
