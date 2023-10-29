@@ -519,9 +519,7 @@ double magic(const string& Expression)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int main()
-
-{///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ СПИСКА
+void testlist() {
     LinkedList<string> lst;
 
     setlocale(LC_ALL, "Russian");
@@ -555,7 +553,9 @@ int main()
     cout << "\n";
     cout << "размер списка  " << lst.size() << "\n\n\n";
 
-    ///////////////////////////////////////////////////////////////////////////////////////// ТЕСТ МАССИВА
+}
+
+void testarray() {
     DArray<int> d;
     d.push(666);
     d.push(777);
@@ -568,13 +568,15 @@ int main()
     d.remove(6);
     d.insert(12345, 7);
     d.push(222);
-    for (int i = 0;i < d.getsize();i++) 
+    for (int i = 0;i < d.getsize();i++)
     {
         cout << d[i] << "\n";
     }
     cout << "размер масcива " << d.getsize() << "\n\n";
+}
 
-    ///////////////////////////////////////////////////////////////////////////////////////// TEST STACK
+void teststack() 
+{
     cout << "Введите выражение: ";
 
     string infixExpression;
@@ -589,5 +591,16 @@ int main()
     SetConsoleTextAttribute(Output, 12);
     cout << "Со смертью этого персонажа нить вашей судьбы обрывается. Загрузите сохранённую игру дабы восстановить течение судьбы, или живите дальше в проклятом мире, который сами и создали..." << "\n\n\n";
     SetConsoleTextAttribute(Output, 7);
+    
+}
+
+int main()
+{
+    testlist();
+
+    testarray();
+
+    teststack();
     return 0;
+    
 }
