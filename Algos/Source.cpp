@@ -4,6 +4,8 @@
 #include <cctype>
 #include <sstream>
 #include <cmath>
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -517,7 +519,7 @@ double magic(const string& Expression)
     return stack.get();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////Tests
 
 void testlist() {
     LinkedList<string> lst;
@@ -555,7 +557,8 @@ void testlist() {
 
 }
 
-void testarray() {
+void testarray() 
+{
     DArray<int> d;
     d.push(666);
     d.push(777);
@@ -594,13 +597,162 @@ void teststack()
     
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////Timsort
+
+int findRun(DArray<int>& arr, int size)
+{
+    int runLength = 1;  // Начинаем с длины Run равной 1
+    int maxRunLength = 0;  // Максимальная длина Run
+    for (int i = 1; i < size; i++) {
+        if (arr[i] >= arr[i - 1]) {
+            runLength++;
+        }
+        else {
+            if (runLength > maxRunLength) {
+                maxRunLength = runLength;
+            }
+            runLength = 1;  // Начинаем новую последовательность Run
+        }
+    }
+    if (runLength > maxRunLength) {
+        maxRunLength = runLength;
+    }
+    return maxRunLength;
+}
+
+void insertionSort(DArray<int>& arr,int left, int right) //Сортировка вставками */(спасибо википедия)/* на вход идет массив, начало и конец
+{
+    for (int j = 1;j <= right;j++) {
+        int key = arr[j];
+        int i = j - 1;
+        while (i >= 0 && arr[i] > key) {
+            arr[i + 1] = arr[i];
+            arr[i] = key;
+            i--;
+        }
+    }
+}
+
+
+void merge(DArray<int>& arr, int left, int right, int mid)
+{
+    int len1 = mid - right + 1;//разбиваем массив на подмассивы
+    int len2 = left - mid;
+   int* leftarr = new int[len1];
+    int* rightarr = new int[len2];
+
+    for (int i = 0; i < len1; i++) // Заполняем массивы данными из нашего большого массива
+    {
+        leftarr[i] = arr[right + i];
+    }
+
+    for (int j = 0; j < len2; j++) 
+    {
+        rightarr[j] = arr[mid + 1 + j];
+    }
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
+    while (i < len1 && j < len2) 
+    {
+        if (leftarr[i] <= rightarr[j]) 
+        {
+            arr[k] = leftarr[i];
+            i++;
+        }
+        else 
+        {
+            arr[k] = rightarr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < len1) 
+    { //копирование оставшихся элементов в левые и правые массивы 
+        arr[right+k] = leftarr[i];
+        k++;
+        i++;
+    }
+
+    while (j < len2) 
+    {
+        arr[right+k] = rightarr[j];
+        k++;
+        j++;
+    }
+
+   
+}
+
+int min_element(int first, int second)
+{
+    if (first < second)
+    {
+        return first;
+    }
+    return second;
+}
+
+void TimSort(DArray<int>& arr,int n)
+{
+    int size = arr.getsize();
+    int RUN = 128;//если сменить на 64 то в функции testTim при достижении размера массива большего чем RUN,вылезет вкусняшка  
+    int i = 0;
+    int left = 0;
+    int mid = 0;
+    int right = 0;
+    for (int i = 0; i < n; i += RUN)
+    {
+        insertionSort(arr, i, min_element((i + RUN-1), (n-1)));
+    }
+   
+     for (int i = 0; i < n; i +=RUN) 
+     {
+        for (i= RUN; i < n; i+=2*i) 
+        {
+            for (int left = 0;left < n;left += 2 * i) 
+            {
+                int mid = left + i - 1;
+                int right = min(left + 2 * i - 1, n);
+                    merge(arr, left, mid, right);
+            }
+        }
+    }
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void testTim()
+{
+    DArray<int> myarr;
+    srand(time(0));
+
+    for (int i = 0; i < rand() % 100+ 1; i++) {//если будет больше чем RUN, будет вкусняшка
+        myarr.push(rand()%1000+1);
+    }
+    for (int i = 0; i < myarr.getsize(); i++) {
+        cout << myarr[i] << " ";
+    }
+    cout << "\n" << "After" << "\n";
+
+    TimSort(myarr,myarr.getsize());
+    for (int i = 0; i < myarr.getsize(); i++) {
+        cout << myarr[i] << " ";
+    }
+    cout << endl;
+}
+
 int main()
 {
-    testlist();
-
-    testarray();
-
-    teststack();
+    setlocale(LC_ALL, "Russian");
+    //testlist();
+    //testarray();
+    testTim();
+    //teststack();
     return 0;
-    
+
 }
