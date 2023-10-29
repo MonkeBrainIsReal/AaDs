@@ -599,26 +599,26 @@ void teststack()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////Timsort
 
-int findRun(DArray<int>& arr, int size)
-{
-    int runLength = 1;  // Начинаем с длины Run равной 1
-    int maxRunLength = 0;  // Максимальная длина Run
-    for (int i = 1; i < size; i++) {
-        if (arr[i] >= arr[i - 1]) {
-            runLength++;
-        }
-        else {
-            if (runLength > maxRunLength) {
-                maxRunLength = runLength;
-            }
-            runLength = 1;  // Начинаем новую последовательность Run
-        }
-    }
-    if (runLength > maxRunLength) {
-        maxRunLength = runLength;
-    }
-    return maxRunLength;
-}
+//int findRun(DArray<int>& arr, int size)
+//{
+//    int runLength = 1;  
+//    int maxRunLength = 0;  
+//    for (int i = 1; i < size; i++) {
+//        if (arr[i] >= arr[i - 1]) {
+//            runLength++;
+//        }
+//        else {
+//            if (runLength > maxRunLength) {
+//                maxRunLength = runLength;
+//            }
+//            runLength = 1;  // начинаем новую последовательность Run
+//        }
+//    }
+//    if (runLength > maxRunLength) {
+//        maxRunLength = runLength;
+//    }
+//    return maxRunLength;
+//}
 
 void insertionSort(DArray<int>& arr,int left, int right) //Сортировка вставками */(спасибо википедия)/* на вход идет массив, начало и конец
 {
