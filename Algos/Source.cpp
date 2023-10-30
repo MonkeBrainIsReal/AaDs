@@ -616,7 +616,7 @@ int minRunLength(int n)
 
 }
 
-void insertionSort(int arr[], int left, int right) {
+void insertionSort(DArray<int>& arr, int left, int right) {
     for (int j = left + 1; j <= right; j++) {
         int key = arr[j];
         int i = j - 1;
@@ -628,7 +628,7 @@ void insertionSort(int arr[], int left, int right) {
     }
 }
 
-void merge(int arr[], int left, int middle, int right) {
+void merge(DArray<int>& arr, int left, int middle, int right) {
     int n1 = middle - left + 1;
     int n2 = right - middle;
 
@@ -679,7 +679,7 @@ int min_element(int first, int second) {
     return second;
 }
 
-void TimSort(int arr[], int n) {
+void TimSort(DArray<int>& arr, int n) {
     
     int RUN = minRunLength(n);
 
@@ -702,18 +702,18 @@ void TimSort(int arr[], int n) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void testTim() {
-    int myarr[150];
-
-    for (int i = 0; i < sizeof(myarr) / sizeof(myarr[0]); i++) {
-        myarr[i] = (rand() % 1000 + 1);
+    //int myarr[150];
+    DArray<int> myarr;
+    for (int i = 0; i < rand() % 1000 + 1; i++) {
+        myarr.push(rand() % 1000 + 1);
     }
-    for (int i = 0; i < sizeof(myarr) / sizeof(myarr[0]); i++) {
+    for (int i = 0; i < myarr.getsize(); i++) {
         cout << myarr[i] << " ";
     }
     cout << "\n" << "After" << "\n";
 
-    TimSort(myarr, sizeof(myarr) / sizeof(myarr[0]));
-    for (int i = 0; i < sizeof(myarr) / sizeof(myarr[0]); i++) {
+    TimSort(myarr, myarr.getsize());
+    for (int i = 0; i < myarr.getsize(); i++) {
         cout << myarr[i] << " ";
     }
     cout << endl;
