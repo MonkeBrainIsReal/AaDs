@@ -600,7 +600,7 @@ void teststack()
 ////////////////////////////////////////////////////////////////////////////////////////////////////Timsort
 
 
-int minRunLength(int n) 
+int minRunLength(int n) //алгоритм нахождения мин последовательности
 {
     if (n < 64) 
     {
@@ -616,7 +616,7 @@ int minRunLength(int n)
 
 }
 
-void insertionSort(DArray<int>& arr, int left, int right) {
+void insertionSort(DArray<int>& arr, int left, int right) {//вставки
     for (int j = left + 1; j <= right; j++) {
         int key = arr[j];
         int i = j - 1;
@@ -628,7 +628,7 @@ void insertionSort(DArray<int>& arr, int left, int right) {
     }
 }
 
-void merge(DArray<int>& arr, int left, int middle, int right) {
+void merge(DArray<int>& arr, int left, int middle, int right) {// слияние которое раньше руинило все
     int n1 = middle - left + 1;
     int n2 = right - middle;
 
@@ -688,7 +688,7 @@ void TimSort(DArray<int>& arr, int n) {
         insertionSort(arr, i, min_element(i + RUN - 1, n - 1));
     }
 
-    for (int spos = RUN; spos < n; spos = 2 * spos) {
+    for (int spos = RUN; spos < n; spos = 2 * spos) {//тут начинается галлоповая сортировка
         for (int left = 0; left < n; left += 2 * spos) {
             int mid = left + spos - 1;
             int right = min_element(left + 2 * spos - 1, n - 1);
