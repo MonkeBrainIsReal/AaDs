@@ -706,7 +706,7 @@ void TimSort(DArray<T>& arr, int n) {
 
 void testTim() {
     //int myarr[150];
-    DArray<int> myarr;
+    DArray<int> myarr;//можно поменять тип массива на float но тогда рандомные функции сломаются
     for (int i = 0; i < rand() % 1000 + 1; i++) 
     {
         myarr.push(rand() % 1000 + 1);
