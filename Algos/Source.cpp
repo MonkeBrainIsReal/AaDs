@@ -615,10 +615,10 @@ int minRunLength(int n) //алгоритм нахождения мин посл�
     return n + r;
 
 }
-
-void insertionSort(DArray<int>& arr, int left, int right) {//вставки
+template <typename T>
+void insertionSort(DArray<T>& arr, int left, int right) {//вставки
     for (int j = left + 1; j <= right; j++) {
-        int key = arr[j];
+        T key = arr[j];
         int i = j - 1;
         while (i >= left && arr[i] > key) {
             arr[i + 1] = arr[i];
@@ -628,12 +628,13 @@ void insertionSort(DArray<int>& arr, int left, int right) {//вставки
     }
 }
 
-void merge(DArray<int>& arr, int left, int middle, int right) {// слияние которое раньше руинило все
+template <typename T>
+void merge(DArray<T>& arr, int left, int middle, int right) {// слияние которое раньше руинило все
     int n1 = middle - left + 1;
     int n2 = right - middle;
 
-    int* leftArray = new int[n1];
-    int* rightArray = new int[n2];
+    T* leftArray = new T[n1];
+    T* rightArray = new T[n2];
 
     for (int i = 0; i < n1; i++) {
         leftArray[i] = arr[left + i];
@@ -672,26 +673,28 @@ void merge(DArray<int>& arr, int left, int middle, int right) {// слияние
     delete[] rightArray;
 }
 
-int min_element(int first, int second) {
-    if (first < second) {
-        return first;
-    }
-    return second;
-}
+//template <typename T>
+//int min_element(T first, T second) {
+//    if (first < second) {
+//        return first;
+//    }
+//    return second;
+//}
 
-void TimSort(DArray<int>& arr, int n) {
+template <typename T>
+void TimSort(DArray<T>& arr, int n) {
     
     int RUN = minRunLength(n);
 
     for (int i = 0; i < n; i += RUN) 
     {
-        insertionSort(arr, i, min_element(i + RUN - 1, n - 1));
+        insertionSort(arr, i, min(i + RUN - 1, n - 1));
     }
 
     for (int spos = RUN; spos < n; spos = 2 * spos) {//тут начинается галлоповая сортировка
         for (int left = 0; left < n; left += 2 * spos) {
             int mid = left + spos - 1;
-            int right = min_element(left + 2 * spos - 1, n - 1);
+            int right = min(left + 2 * spos - 1, n - 1);
             if (mid < right) {
                 merge(arr, left, mid, right);
             }
@@ -704,16 +707,19 @@ void TimSort(DArray<int>& arr, int n) {
 void testTim() {
     //int myarr[150];
     DArray<int> myarr;
-    for (int i = 0; i < rand() % 1000 + 1; i++) {
+    for (int i = 0; i < rand() % 1000 + 1; i++) 
+    {
         myarr.push(rand() % 1000 + 1);
     }
-    for (int i = 0; i < myarr.getsize(); i++) {
+    for (int i = 0; i < myarr.getsize(); i++) 
+    {
         cout << myarr[i] << " ";
     }
     cout << "\n" << "After" << "\n";
 
     TimSort(myarr, myarr.getsize());
-    for (int i = 0; i < myarr.getsize(); i++) {
+    for (int i = 0; i < myarr.getsize(); i++) 
+    {
         cout << myarr[i] << " ";
     }
     cout << endl;
