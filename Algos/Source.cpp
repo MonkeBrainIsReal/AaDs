@@ -693,8 +693,8 @@ void TimSort(DArray<T>& arr, int n) {
 
     for (int spos = RUN; spos < n; spos = 2 * spos) {//тут начинается галлоповая сортировка
         for (int left = 0; left < n; left += 2 * spos) {
-            int mid = left + spos - 1;
-            int right = min(left + 2 * spos - 1, n - 1);
+            int mid = min((left + spos - 1), (n - 1));
+            int right = min((left + 2 * spos - 1), n - 1);
             if (mid < right) {
                 merge(arr, left, mid, right);
             }
