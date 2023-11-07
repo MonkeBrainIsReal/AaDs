@@ -615,6 +615,7 @@ int minRunLength(int n) //алгоритм нахождения мин посл�
     return n + r;
 
 }
+
 template <typename T>
 void insertionSort(DArray<T>& arr, int left, int right) {//вставки
     for (int j = left + 1; j <= right; j++) {
@@ -643,18 +644,76 @@ void merge(DArray<T>& arr, int left, int middle, int right) {// слияние �
         rightArray[i] = arr[middle + 1 + i];
     }
 
-    int i = 0, j = 0, k = left;
+    int i = 0, j = middle + 1, k = left;
+    int lcount = 0;
+    int rcount = 0;
 
     while (i < n1 && j < n2) {
         if (leftArray[i] <= rightArray[j]) {
             arr[k] = leftArray[i];
             i++;
+            lcount++;
+            rcount = 0;
         }
         else {
             arr[k] = rightArray[j];
             j++;
+            rcount++;
+            lcount = 0;
         }
         k++;
+        if (lcount >= 7) 
+        {
+            int mypow = 0;
+            rcount = 0;
+            for (int lpos = i + pow(2, mypow);lpos < n1;lpos += i + pow(2, mypow)) 
+            {
+                if (leftArray[lpos] < arr[j]) {
+                    mypow++;
+                }
+                else 
+                {
+                    lpos = lpos - pow(2, mypow);
+                    while (i < lpos) 
+                    {
+                        arr[k] = leftArray[i];
+                        i++;
+                        k++;
+                    }
+                    break;
+                }
+
+
+            }
+
+
+        }
+        if (rcount >= 7)
+        {
+            int mypow = 0;
+            lcount = 0;
+            for (int rpos = j + pow(2, mypow);rpos < n1;rpos += j + pow(2, mypow))
+            {
+                if (leftArray[rpos] < arr[j]) {
+                    mypow++;
+                }
+                else
+                {
+                    rpos = rpos - pow(2, mypow);
+                    while (j < rpos)
+                    {
+                        arr[k] = leftArray[j];
+                        j++;
+                        k++;
+                    }
+                    break;
+                }
+
+
+            }
+
+
+        }
     }
 
     while (i < n1) {
@@ -691,8 +750,10 @@ void TimSort(DArray<T>& arr, int n) {
         insertionSort(arr, i, min(i + RUN - 1, n - 1));
     }
 
-    for (int spos = RUN; spos < n; spos = 2 * spos) {//тут начинается галлоповая сортировка
-        for (int left = 0; left < n; left += 2 * spos) {
+    for (int spos = RUN; spos < n; spos = 2 * spos) 
+    {
+        for (int left = 0; left < n; left += 2 * spos) 
+        {
             int mid = min((left + spos - 1), (n - 1));
             int right = min((left + 2 * spos - 1), n - 1);
             if (mid < right) {
@@ -707,9 +768,9 @@ void TimSort(DArray<T>& arr, int n) {
 void testTim() {
     //int myarr[150];
     DArray<int> myarr;//можно поменять тип массива на float но тогда рандомные функции сломаются
-    for (int i = 0; i < rand() % 1000 + 1; i++) 
+    for (int i = 0; i < /*rand() % 1000 + 1*/100; i++) 
     {
-        myarr.push(rand() % 1000 + 1);
+        myarr.push(rand() % 10000 + 1);
     }
     for (int i = 0; i < myarr.getsize(); i++) 
     {
