@@ -5,25 +5,27 @@
 
 using namespace std;
 //"C:\Users\83532\source\repos\MonkeBrainIsReal\AaDs\Kursach\Kursach\Kursach\test.txt"
+//"C:\Users\Denis\source\repos\MonkeBrainIsReal\AaDs\Kursach\Kursach\Kursach\test.txt"
 
 
-struct Edge 
-{
-    Edge(char s, char d, int w) : source(s), destination(d), weight(w) {};
-    char source;
-    char destination;
+struct Edge {
+    string vertex1;
+    string vertex2;
     int weight;
 
-   
-   
+    Edge(const string& v1, const string& v2, int w) : vertex1(v1), vertex2(v2), weight(w) {}
 };
 
+/
+int main() {
+    // Открываем файл
+    ifstream inputFile("C:\\Users\\Denis\\source\\repos\\MonkeBrainIsReal\\AaDs\\Kursach\\Kursach\\Kursach\\test.txt");
+    if (!inputFile.is_open()) {
+        cerr << "Unable to open the file." << endl;
+        return 1;
+    }
 
-
-
-int main() 
-{
-    ifstream inputFile("C:\\Users\\83532\\source\\repos\\MonkeBrainIsReal\\AaDs\\Kursach\\Kursach\\Kursach\\test.txt");
     
+
     return 0;
 }
