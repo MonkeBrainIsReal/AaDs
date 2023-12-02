@@ -1,11 +1,10 @@
 #include <iostream>
 #include <windows.h>
 #include <string>
-#include <cctype>
 #include <sstream>
 #include <cmath>
 #include <ctime>
-#include <cstdlib>
+
 
 using namespace std;
 HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -19,7 +18,7 @@ private:
 public:
     DArray(int size = 100) //базовый конструктор с каким то случайным размером
     {
-
+        this->size;
         cap = size;
         arr = new T[size];
     }
@@ -599,7 +598,6 @@ void teststack()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////Timsort
 
-
 int minRunLength(int n) //алгоритм нахождения мин последовательности
 {
     if (n < 64) 
@@ -732,14 +730,6 @@ void merge(DArray<T>& arr, int left, int middle, int right) {// слияние �
     delete[] rightArray;
 }
 
-//template <typename T>
-//int min_element(T first, T second) {
-//    if (first < second) {
-//        return first;
-//    }
-//    return second;
-//}
-
 template <typename T>
 void TimSort(DArray<T>& arr, int n) {
     
@@ -756,7 +746,8 @@ void TimSort(DArray<T>& arr, int n) {
         {
             int mid = min((left + spos - 1), (n - 1));
             int right = min((left + 2 * spos - 1), n - 1);
-            if (mid < right) {
+            if (mid < right) 
+            {
                 merge(arr, left, mid, right);
             }
         }
@@ -765,10 +756,10 @@ void TimSort(DArray<T>& arr, int n) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void testTim() {
-    //int myarr[150];
+void testTim() 
+{
     DArray<int> myarr;//можно поменять тип массива на float но тогда рандомные функции сломаются
-    for (int i = 0; i < /*rand() % 1000 + 1*/100; i++) 
+    for (int i = 0; i < rand() % 1000 + 1; i++) 
     {
         myarr.push(rand() % 10000 + 1);
     }
@@ -785,6 +776,8 @@ void testTim() {
     }
     cout << endl;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main()
 {
